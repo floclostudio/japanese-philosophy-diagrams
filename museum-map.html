@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金継ぎ・茶道具を見る | Museum Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #fafaf9;
+            color: #1c1917;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .lang-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .lang-btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .lang-btn.active {
+            background: #1c1917;
+            color: white;
+        }
+        
+        .lang-btn:not(.active) {
+            background: #e7e5e4;
+            color: #57534e;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            color: #78716c;
+            margin-top: 4px;
+        }
+        
+        .region-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .region-tab {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .region-tab.active {
+            background: #1c1917;
+            color: white;
+        }
+        
+        .region-tab:not(.active) {
+            background: white;
+            color: #57534e;
+        }
+        
+        .region-tab:not(.active):hover {
+            background: #f5f5f4;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .area-section {
+            margin-bottom: 24px;
+        }
+        
+        .area-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .area-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e7e5e4;
+        }
+        
+        .area-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .area-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #57534e;
+        }
+        
+        .museum-list {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .museum-item {
+            padding: 16px;
+            border: 1px solid #e7e5e4;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .museum-item:hover {
+            border-color: #b8860b;
+            background: #fffbeb;
+        }
+        
+        .museum-item.selected {
+            border-color: #b8860b;
+            border-width: 2px;
+            background: #fffbeb;
+        }
+        
+        .museum-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .museum-area {
+            font-size: 12px;
+            color: #78716c;
+        }
+        
+        .detail-panel {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+            border-left: 4px solid #b8860b;
+            display: none;
+        }
+        
+        .detail-panel.visible {
+            display: block;
+        }
+        
+        .detail-name {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .detail-area {
+            font-size: 14px;
+            color: #78716c;
+            margin-bottom: 12px;
+        }
+        
+        .detail-highlight {
+            color: #44403c;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        
+        .detail-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .detail-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .detail-info-label {
+            color: #78716c;
+            font-size: 12px;
+        }
+        
+        .detail-info-value {
+            color: #44403c;
+        }
+        
+        .detail-link {
+            color: #b8860b;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+        
+        .detail-link:hover {
+            color: #92400e;
+        }
+        
+        .disclaimer {
+            text-align: center;
+            font-size: 12px;
+            color: #a8a29e;
+            margin-bottom: 24px;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #a8a29e;
+            padding-top: 16px;
+            border-top: 1px solid #e7e5e4;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 16px;
+            }
+            .title {
+                font-size: 20px;
+            }
+            .detail-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="ja">日本語</button>
+                <button class="lang-btn" data-lang="en">English</button>
+            </div>
+            <h1 class="title" id="main-title">金継ぎ・茶道具を見る</h1>
+            <p class="subtitle" id="main-subtitle">関西・東京の美術館ガイド</p>
+        </div>
+        
+        <div class="region-tabs">
+            <button class="region-tab active" data-region="kansai" id="tab-kansai">関西</button>
+            <button class="region-tab" data-region="tokyo" id="tab-tokyo">東京</button>
+        </div>
+        
+        <div class="detail-panel" id="detail">
+            <h2 class="detail-name" id="detail-name"></h2>
+            <p class="detail-area" id="detail-area"></p>
+            <p class="detail-highlight" id="detail-highlight"></p>
+            <div class="detail-info">
+                <div class="detail-info-item">
+                    <span class="detail-info-label" id="label-access">アクセス</span>
+                    <span class="detail-info-value" id="detail-access"></span>
+                </div>
+                <div class="detail-info-item">
+                    <span class="detail-info-label" id="label-note">備考</span>
+                    <span class="detail-info-value" id="detail-note"></span>
+                </div>
+            </div>
+            <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener noreferrer">ウェブサイト →</a>
+        </div>
+        
+        <div class="content-card" id="museum-container">
+            <!-- Museums will be rendered here -->
+        </div>
+        
+        <p class="disclaimer" id="disclaimer">※金継ぎそのものの常設展示は稀です。茶道具コレクションの中に修復された器がある可能性があります。</p>
+        
+        <div class="footer">
+            floclo — <span id="footer-text">探求の地図</span>
+        </div>
+    </div>
+    
+    <script>
+        const museums = {
+            kansai: {
+                osaka: {
+                    color: '#e74c3c',
+                    name: { ja: '大阪', en: 'Osaka' },
+                    items: [
+                        {
+                            id: 'toyo-ceramic',
+                            name: { ja: '大阪市立東洋陶磁美術館', en: 'Osaka Museum of Oriental Ceramics' },
+                            area: { ja: '中之島', en: 'Nakanoshima' },
+                            highlight: { ja: '国宝「油滴天目茶碗」。2024年リニューアル。自然光展示室が評判。', en: 'National Treasure "Yuteki Tenmoku" tea bowl. Renovated 2024. Famous natural light gallery.' },
+                            access: { ja: '淀屋橋駅徒歩5分', en: '5 min walk from Yodoyabashi Station' },
+                            note: { ja: '陶磁器専門。金継ぎ展示の有無は要確認。', en: 'Ceramics specialty. Check for kintsugi displays.' },
+                            url: 'https://www.moco.or.jp/'
+                        },
+                        {
+                            id: 'fujita',
+                            name: { ja: '藤田美術館', en: 'Fujita Museum' },
+                            area: { ja: '都島区', en: 'Miyakojima' },
+                            highlight: { ja: '国宝「曜変天目茶碗」所蔵。2022年リニューアル。', en: 'Houses National Treasure "Yohen Tenmoku" tea bowl. Renovated 2022.' },
+                            access: { ja: 'JR大阪城北詰駅', en: 'JR Osakajokitazume Station' },
+                            note: { ja: '展示替えあり、事前に確認を。', en: 'Rotating exhibitions, check before visiting.' },
+                            url: 'https://fujita-museum.or.jp/'
+                        },
+                        {
+                            id: 'itsuo',
+                            name: { ja: '逸翁美術館', en: 'Itsuo Museum' },
+                            area: { ja: '池田市', en: 'Ikeda' },
+                            highlight: { ja: '阪急創業者・小林一三の茶道具コレクション。', en: 'Tea utensil collection of Hankyu founder.' },
+                            access: { ja: '阪急池田駅', en: 'Hankyu Ikeda Station' },
+                            note: { ja: '企画展中心、常設なし。', en: 'Special exhibitions only.' },
+                            url: 'https://www.hankyu-bunka.or.jp/itsuo-museum/'
+                        }
+                    ]
+                },
+                kyoto: {
+                    color: '#9b59b6',
+                    name: { ja: '京都', en: 'Kyoto' },
+                    items: [
+                        {
+                            id: 'kyoto-national',
+                            name: { ja: '京都国立博物館', en: 'Kyoto National Museum' },
+                            area: { ja: '東山区', en: 'Higashiyama' },
+                            highlight: { ja: '日本美術の総本山。茶道具展示あり。', en: 'Premier Japanese art museum. Tea utensil exhibitions.' },
+                            access: { ja: '七条駅', en: 'Shichijo Station' },
+                            note: { ja: '特別展を要チェック。', en: 'Check special exhibitions.' },
+                            url: 'https://www.kyohaku.go.jp/'
+                        },
+                        {
+                            id: 'chado',
+                            name: { ja: '茶道資料館（裏千家）', en: 'Urasenke Tea Ceremony Museum' },
+                            area: { ja: '上京区', en: 'Kamigyo' },
+                            highlight: { ja: '裏千家歴代の茶道具。拝観料に呈茶含む。', en: 'Urasenke tea masters\' collection. Tea included.' },
+                            access: { ja: '堀川通', en: 'Horikawa-dori' },
+                            note: { ja: '茶道に興味あれば必訪。', en: 'Must-visit for tea ceremony interest.' },
+                            url: 'https://www.urasenke.or.jp/textc/gallery/'
+                        },
+                        {
+                            id: 'raku',
+                            name: { ja: '樂美術館', en: 'Raku Museum' },
+                            area: { ja: '中京区', en: 'Nakagyo' },
+                            highlight: { ja: '樂家歴代の茶碗。450年の歴史。', en: 'Raku family tea bowls. 450 years of history.' },
+                            access: { ja: '二条城近く', en: 'Near Nijo Castle' },
+                            note: { ja: '茶碗に特化。', en: 'Specialized in tea bowls.' },
+                            url: 'https://www.raku-yaki.or.jp/'
+                        }
+                    ]
+                },
+                kobe: {
+                    color: '#3498db',
+                    name: { ja: '神戸', en: 'Kobe' },
+                    items: [
+                        {
+                            id: 'kosetsu',
+                            name: { ja: '香雪美術館', en: 'Kosetsu Museum' },
+                            area: { ja: '御影', en: 'Mikage' },
+                            highlight: { ja: '朝日新聞創業者・村山龍平のコレクション。', en: 'Collection of Asahi Shimbun founder.' },
+                            access: { ja: '御影駅', en: 'Mikage Station' },
+                            note: { ja: '茶道具あり。中之島分館も。', en: 'Has tea utensils. Also Nakanoshima branch.' },
+                            url: 'https://www.kosetsu-museum.or.jp/'
+                        }
+                    ]
+                }
+            },
+            tokyo: {
+                tokyo: {
+                    color: '#2ecc71',
+                    name: { ja: '東京', en: 'Tokyo' },
+                    items: [
+                        {
+                            id: 'nezu',
+                            name: { ja: '根津美術館', en: 'Nezu Museum' },
+                            area: { ja: '南青山', en: 'Minami-Aoyama' },
+                            highlight: { ja: '国宝「燕子花図屏風」。茶道具コレクション充実。庭園も美しい。', en: 'National Treasure "Irises" screens. Rich tea utensil collection. Beautiful garden.' },
+                            access: { ja: '表参道駅徒歩8分', en: '8 min walk from Omotesando Station' },
+                            note: { ja: '茶の湯の名品多数。必訪。', en: 'Many tea ceremony masterpieces. Must-visit.' },
+                            url: 'https://www.nezu-muse.or.jp/'
+                        },
+                        {
+                            id: 'goto',
+                            name: { ja: '五島美術館', en: 'Gotoh Museum' },
+                            area: { ja: '上野毛', en: 'Kaminoge' },
+                            highlight: { ja: '国宝「源氏物語絵巻」。茶道具、陶磁器の名品。', en: 'National Treasure "Tale of Genji" scrolls. Fine tea utensils.' },
+                            access: { ja: '上野毛駅徒歩5分', en: '5 min walk from Kaminoge Station' },
+                            note: { ja: '茶道具コレクションが優れている。', en: 'Excellent tea utensil collection.' },
+                            url: 'https://www.gotoh-museum.or.jp/'
+                        },
+                        {
+                            id: 'seikado',
+                            name: { ja: '静嘉堂文庫美術館', en: 'Seikado Bunko Art Museum' },
+                            area: { ja: '丸の内', en: 'Marunouchi' },
+                            highlight: { ja: '国宝「曜変天目茶碗」（稲葉天目）所蔵。三菱創業家コレクション。', en: 'Houses National Treasure "Yohen Tenmoku" (Inaba Tenmoku).' },
+                            access: { ja: '二重橋前駅', en: 'Nijubashimae Station' },
+                            note: { ja: '世界で最も美しいと言われる曜変天目。', en: 'Said to be the world\'s most beautiful Yohen Tenmoku.' },
+                            url: 'https://www.seikado.or.jp/'
+                        },
+                        {
+                            id: 'tnm',
+                            name: { ja: '東京国立博物館', en: 'Tokyo National Museum' },
+                            area: { ja: '上野', en: 'Ueno' },
+                            highlight: { ja: '日本最大の博物館。茶道具、陶磁器の常設展示あり。', en: 'Japan\'s largest museum. Permanent tea utensil displays.' },
+                            access: { ja: '上野駅', en: 'Ueno Station' },
+                            note: { ja: '本館14室が茶の美術。', en: 'Main building Room 14 for tea art.' },
+                            url: 'https://www.tnm.jp/'
+                        },
+                        {
+                            id: 'suntory',
+                            name: { ja: 'サントリー美術館', en: 'Suntory Museum of Art' },
+                            area: { ja: '六本木', en: 'Roppongi' },
+                            highlight: { ja: '「生活の中の美」がテーマ。茶道具、漆工芸の企画展が多い。', en: '"Art in Life" theme. Many tea utensil exhibitions.' },
+                            access: { ja: '六本木駅直結', en: 'Direct access from Roppongi Station' },
+                            note: { ja: '企画展をチェック。', en: 'Check special exhibitions.' },
+                            url: 'https://www.suntory.co.jp/sma/'
+                        }
+                    ]
+                }
+            }
+        };
+        
+        const text = {
+            ja: {
+                title: '金継ぎ・茶道具を見る',
+                subtitle: '関西・東京の美術館ガイド',
+                kansai: '関西',
+                tokyo: '東京',
+                access: 'アクセス',
+                note: '備考',
+                website: 'ウェブサイト →',
+                disclaimer: '※金継ぎそのものの常設展示は稀です。茶道具コレクションの中に修復された器がある可能性があります。',
+                footer: '探求の地図'
+            },
+            en: {
+                title: 'Seeing Kintsugi & Tea Utensils',
+                subtitle: 'Museum Guide: Kansai & Tokyo',
+                kansai: 'Kansai',
+                tokyo: 'Tokyo',
+                access: 'Access',
+                note: 'Note',
+                website: 'Website →',
+                disclaimer: '*Permanent kintsugi exhibitions are rare. Tea utensil collections may include repaired pieces.',
+                footer: 'Maps of exploration'
+            }
+        };
+        
+        let currentLang = 'ja';
+        let currentRegion = 'kansai';
+        let selectedMuseum = null;
+        
+        function updateText() {
+            const t = text[currentLang];
+            document.getElementById('main-title').textContent = t.title;
+            document.getElementById('main-subtitle').textContent = t.subtitle;
+            document.getElementById('tab-kansai').textContent = t.kansai;
+            document.getElementById('tab-tokyo').textContent = t.tokyo;
+            document.getElementById('label-access').textContent = t.access;
+            document.getElementById('label-note').textContent = t.note;
+            document.getElementById('detail-url').textContent = t.website;
+            document.getElementById('disclaimer').textContent = t.disclaimer;
+            document.getElementById('footer-text').textContent = t.footer;
+        }
+        
+        function renderMuseums() {
+            const container = document.getElementById('museum-container');
+            container.innerHTML = '';
+            
+            const regionData = museums[currentRegion];
+            
+            for (const [areaKey, areaData] of Object.entries(regionData)) {
+                const section = document.createElement('div');
+                section.className = 'area-section';
+                
+                const header = document.createElement('div');
+                header.className = 'area-header';
+                header.innerHTML = `
+                    <span class="area-dot" style="background-color: ${areaData.color}"></span>
+                    <span class="area-name">${areaData.name[currentLang]}</span>
+                `;
+                section.appendChild(header);
+                
+                const list = document.createElement('div');
+                list.className = 'museum-list';
+                
+                for (const museum of areaData.items) {
+                    const item = document.createElement('div');
+                    item.className = 'museum-item';
+                    item.dataset.id = museum.id;
+                    item.innerHTML = `
+                        <div class="museum-name">${museum.name[currentLang]}</div>
+                        <div class="museum-area">${museum.area[currentLang]}</div>
+                    `;
+                    item.addEventListener('click', () => selectMuseum(museum, areaData.color));
+                    list.appendChild(item);
+                }
+                
+                section.appendChild(list);
+                container.appendChild(section);
+            }
+        }
+        
+        function selectMuseum(museum, color) {
+            // Update selection state
+            document.querySelectorAll('.museum-item').forEach(item => {
+                item.classList.remove('selected');
+                if (item.dataset.id === museum.id) {
+                    item.classList.add('selected');
+                }
+            });
+            
+            // Update detail panel
+            const t = text[currentLang];
+            document.getElementById('detail-name').textContent = museum.name[currentLang];
+            document.getElementById('detail-area').textContent = museum.area[currentLang];
+            document.getElementById('detail-highlight').textContent = museum.highlight[currentLang];
+            document.getElementById('detail-access').textContent = museum.access[currentLang];
+            document.getElementById('detail-note').textContent = museum.note[currentLang];
+            document.getElementById('detail-url').href = museum.url;
+            document.getElementById('detail').classList.add('visible');
+            
+            selectedMuseum = museum;
+        }
+        
+        // Language toggle
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentLang = btn.dataset.lang;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateText();
+                renderMuseums();
+                if (selectedMuseum) {
+                    // Re-select to update language
+                    const regionData = museums[currentRegion];
+                    for (const areaData of Object.values(regionData)) {
+                        const found = areaData.items.find(m => m.id === selectedMuseum.id);
+                        if (found) {
+                            selectMuseum(found, areaData.color);
+                            break;
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Region toggle
+        document.querySelectorAll('.region-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                currentRegion = tab.dataset.region;
+                document.querySelectorAll('.region-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                selectedMuseum = null;
+                document.getElementById('detail').classList.remove('visible');
+                renderMuseums();
+            });
+        });
+        
+        // Initial render
+        renderMuseums();
+    </script>
+</body>
+</html>

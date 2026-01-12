@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金継ぎの系譜 | The Lineage of Kintsugi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #fafaf9;
+            color: #1c1917;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .lang-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .lang-btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .lang-btn.active {
+            background: #1c1917;
+            color: white;
+        }
+        
+        .lang-btn:not(.active) {
+            background: #e7e5e4;
+            color: #57534e;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            color: #1c1917;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            color: #78716c;
+            margin-top: 4px;
+        }
+        
+        .diagram-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .diagram {
+            width: 100%;
+            height: auto;
+        }
+        
+        .node {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .node:hover circle {
+            fill: #f5f5f4;
+        }
+        
+        .node.selected circle {
+            fill: #1c1917;
+        }
+        
+        .node.selected text.label {
+            fill: #fafaf9;
+        }
+        
+        .node.selected text.reading,
+        .node.selected text.period {
+            fill: #a8a29e;
+        }
+        
+        .detail-panel {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+            border-left: 4px solid #b8860b;
+            display: none;
+        }
+        
+        .detail-panel.visible {
+            display: block;
+        }
+        
+        .detail-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .detail-label {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        
+        .detail-reading {
+            font-size: 14px;
+            color: #78716c;
+        }
+        
+        .detail-period {
+            font-size: 12px;
+            color: #a8a29e;
+        }
+        
+        .detail-text {
+            color: #44403c;
+            line-height: 1.7;
+        }
+        
+        .instruction {
+            text-align: center;
+            color: #a8a29e;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #a8a29e;
+            padding-top: 16px;
+            border-top: 1px solid #e7e5e4;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 16px;
+            }
+            .title {
+                font-size: 20px;
+            }
+            .diagram-container {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="ja">日本語</button>
+                <button class="lang-btn" data-lang="en">English</button>
+            </div>
+            <h1 class="title" data-ja="金継ぎの系譜" data-en="The Lineage of Kintsugi">金継ぎの系譜</h1>
+            <p class="subtitle" data-ja="——時間を受け入れる思想の流れ" data-en="— A philosophy of accepting time">——時間を受け入れる思想の流れ</p>
+        </div>
+        
+        <div class="diagram-container">
+            <svg class="diagram" viewBox="0 0 600 380">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#a8a29e"/>
+                    </marker>
+                </defs>
+                
+                <!-- Arrows -->
+                <line x1="195" y1="100" x2="255" y2="100" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                <line x1="345" y1="100" x2="405" y2="100" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                <line x1="450" y1="145" x2="450" y2="195" stroke="#a8a29e" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                
+                <!-- Dashed lines to related concepts -->
+                <line x1="400" y1="260" x2="320" y2="310" stroke="#d6d3d1" stroke-width="1" stroke-dasharray="4 4"/>
+                <line x1="500" y1="260" x2="540" y2="310" stroke="#d6d3d1" stroke-width="1" stroke-dasharray="4 4"/>
+                
+                <!-- Node: Mujo -->
+                <g class="node" data-id="mujo">
+                    <circle cx="150" cy="100" r="45" fill="#fafaf9" stroke="#1c1917" stroke-width="1.5"/>
+                    <text x="150" y="92" text-anchor="middle" class="label" font-size="14" font-weight="500">無常</text>
+                    <text x="150" y="108" text-anchor="middle" class="reading" font-size="11" fill="#78716c">むじょう</text>
+                    <text x="150" y="124" text-anchor="middle" class="period" font-size="10" fill="#a8a29e">6世紀〜</text>
+                </g>
+                
+                <!-- Node: Mono no Aware -->
+                <g class="node" data-id="aware">
+                    <circle cx="300" cy="100" r="45" fill="#fafaf9" stroke="#1c1917" stroke-width="1.5"/>
+                    <text x="300" y="92" text-anchor="middle" class="label" font-size="14" font-weight="500">物の哀れ</text>
+                    <text x="300" y="108" text-anchor="middle" class="reading" font-size="11" fill="#78716c">もののあわれ</text>
+                    <text x="300" y="124" text-anchor="middle" class="period" font-size="10" fill="#a8a29e">平安〜</text>
+                </g>
+                
+                <!-- Node: Wabi-Sabi -->
+                <g class="node" data-id="wabisabi">
+                    <circle cx="450" cy="100" r="45" fill="#fafaf9" stroke="#1c1917" stroke-width="1.5"/>
+                    <text x="450" y="92" text-anchor="middle" class="label" font-size="14" font-weight="500">侘び寂び</text>
+                    <text x="450" y="108" text-anchor="middle" class="reading" font-size="11" fill="#78716c">わびさび</text>
+                    <text x="450" y="124" text-anchor="middle" class="period" font-size="10" fill="#a8a29e">15-16世紀</text>
+                </g>
+                
+                <!-- Node: Kintsugi (main) -->
+                <g class="node" data-id="kintsugi">
+                    <circle cx="450" cy="240" r="55" fill="#fafaf9" stroke="#b8860b" stroke-width="3"/>
+                    <circle cx="450" cy="240" r="65" fill="none" stroke="#b8860b" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+                    <text x="450" y="232" text-anchor="middle" class="label" font-size="16" font-weight="500">金継ぎ</text>
+                    <text x="450" y="252" text-anchor="middle" class="reading" font-size="12" fill="#78716c">きんつぎ</text>
+                    <text x="450" y="272" text-anchor="middle" class="period" font-size="10" fill="#a8a29e">15世紀〜</text>
+                </g>
+                
+                <!-- Related: Ma -->
+                <g class="related-node">
+                    <circle cx="540" cy="340" r="30" fill="none" stroke="#d6d3d1" stroke-width="1" stroke-dasharray="3 3"/>
+                    <text x="540" y="336" text-anchor="middle" font-size="12" fill="#78716c">間</text>
+                    <text x="540" y="352" text-anchor="middle" font-size="10" fill="#a8a29e">ま</text>
+                </g>
+                
+                <!-- Related: Mottainai -->
+                <g class="related-node">
+                    <circle cx="280" cy="340" r="35" fill="none" stroke="#d6d3d1" stroke-width="1" stroke-dasharray="3 3"/>
+                    <text x="280" y="340" text-anchor="middle" font-size="11" fill="#78716c">もったいない</text>
+                </g>
+                
+                <!-- Labels -->
+                <text x="300" y="175" text-anchor="middle" font-size="11" fill="#a8a29e" data-ja="思想の流れ" data-en="Flow of ideas">思想の流れ</text>
+                <text x="410" y="370" text-anchor="middle" font-size="10" fill="#d6d3d1" data-ja="関連する概念" data-en="Related concepts">関連する概念</text>
+            </svg>
+        </div>
+        
+        <div class="detail-panel" id="detail">
+            <div class="detail-header">
+                <span class="detail-label" id="detail-label"></span>
+                <span class="detail-reading" id="detail-reading"></span>
+                <span class="detail-period" id="detail-period"></span>
+            </div>
+            <p class="detail-text" id="detail-text"></p>
+        </div>
+        
+        <p class="instruction" data-ja="各ノードをクリックすると詳細が表示されます" data-en="Click each node to see details">各ノードをクリックすると詳細が表示されます</p>
+        
+        <div class="footer">
+            floclo — <span data-ja="見えない構造を描く試み" data-en="Mapping invisible structures">見えない構造を描く試み</span>
+        </div>
+    </div>
+    
+    <script>
+        const content = {
+            ja: {
+                mujo: {
+                    label: '無常',
+                    reading: 'むじょう',
+                    period: '6世紀〜',
+                    text: '仏教伝来とともに日本に根付いた概念。すべてのものは変化し、留まらないという真実。日本では「克服すべき問題」ではなく「受け入れるべき前提」として文化に浸透した。'
+                },
+                aware: {
+                    label: '物の哀れ',
+                    reading: 'もののあわれ',
+                    period: '平安時代〜',
+                    text: '移ろいゆくものへの切ない気づき、共感。桜が散るからこそ美しい、という感覚。無常を悲しみとして受け止めつつ、その悲しみ自体に美を見出す。'
+                },
+                wabisabi: {
+                    label: '侘び寂び',
+                    reading: 'わびさび',
+                    period: '15-16世紀',
+                    text: '茶の湯の文化から結晶化した美学。完璧で対称的なものより、ヒビや経年変化のあるものに価値を見出す。「まだ生きていない」完璧より、「時間を経た」不完全を尊ぶ。'
+                },
+                kintsugi: {
+                    label: '金継ぎ',
+                    reading: 'きんつぎ',
+                    period: '15世紀〜',
+                    text: '割れた器を漆と金で修復する技法。傷を隠すのではなく、金で照らし出す。「この器には歴史がある」という宣言。修復を通じて、時間の経過を可視化する。'
+                }
+            },
+            en: {
+                mujo: {
+                    label: 'Mujō',
+                    reading: '無常',
+                    period: '6th century–',
+                    text: 'A concept that took root with Buddhism\'s arrival in Japan. The truth that nothing stays the same. In Japan, this became not a problem to overcome, but a premise to accept.'
+                },
+                aware: {
+                    label: 'Mono no Aware',
+                    reading: '物の哀れ',
+                    period: 'Heian period–',
+                    text: 'A bittersweet awareness of impermanence. Cherry blossoms are beautiful because they fall. Finding beauty in the very sadness of things passing.'
+                },
+                wabisabi: {
+                    label: 'Wabi-Sabi',
+                    reading: '侘び寂び',
+                    period: '15th-16th century',
+                    text: 'An aesthetic crystallized from tea ceremony culture. Valuing cracks and aging over perfect symmetry. Preferring what has "lived through time" over what is "not yet alive."'
+                },
+                kintsugi: {
+                    label: 'Kintsugi',
+                    reading: '金継ぎ',
+                    period: '15th century–',
+                    text: 'Repairing broken pottery with lacquer and gold. Instead of hiding damage, illuminating it. A declaration: "This object has history." Making the passage of time visible through repair.'
+                }
+            }
+        };
+        
+        let currentLang = 'ja';
+        let selectedNode = null;
+        
+        // Language toggle
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentLang = btn.dataset.lang;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update all translatable elements
+                document.querySelectorAll('[data-ja]').forEach(el => {
+                    el.textContent = el.dataset[currentLang];
+                });
+                
+                // Update detail panel if visible
+                if (selectedNode) {
+                    showDetail(selectedNode);
+                }
+            });
+        });
+        
+        // Node click handlers
+        document.querySelectorAll('.node').forEach(node => {
+            node.addEventListener('click', () => {
+                const id = node.dataset.id;
+                
+                // Toggle selection
+                if (selectedNode === id) {
+                    selectedNode = null;
+                    node.classList.remove('selected');
+                    document.getElementById('detail').classList.remove('visible');
+                } else {
+                    document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'));
+                    node.classList.add('selected');
+                    selectedNode = id;
+                    showDetail(id);
+                }
+            });
+        });
+        
+        function showDetail(id) {
+            const data = content[currentLang][id];
+            document.getElementById('detail-label').textContent = data.label;
+            document.getElementById('detail-reading').textContent = data.reading;
+            document.getElementById('detail-period').textContent = data.period;
+            document.getElementById('detail-text').textContent = data.text;
+            document.getElementById('detail').classList.add('visible');
+        }
+    </script>
+</body>
+</html>
