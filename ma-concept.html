@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>間 Ma — Space · Time · Relationship</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #faf9f7;
+            --text: #1a1a1a;
+            --text2: #5a5a5a;
+            --text3: #8a8a8a;
+            --space: #2d5a4a;
+            --time: #8b4a2a;
+            --relation: #4a4a7a;
+            --border: #e0ddd8;
+            --hover: #f5f3f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            font-size: 13px;
+            z-index: 100;
+        }
+        .lang-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .lang-btn.active {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+        .lang-btn:hover:not(.active) {
+            background: var(--hover);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        /* Diagram */
+        .diagram {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1.2;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Center */
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            z-index: 10;
+            padding: 15px;
+        }
+        .center-kanji {
+            font-size: 56px;
+            font-weight: 400;
+            line-height: 1;
+        }
+        .center-reading {
+            font-size: 14px;
+            color: var(--text2);
+            margin-top: 2px;
+        }
+        .center-origin {
+            font-size: 10px;
+            color: var(--text3);
+            margin-top: 8px;
+            text-align: center;
+            line-height: 1.5;
+            padding: 0 5px;
+        }
+
+        /* Connecting Lines */
+        .lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .lines svg {
+            width: 100%;
+            height: 100%;
+        }
+        .lines line {
+            stroke: var(--border);
+            stroke-width: 1;
+        }
+
+        /* Sections */
+        .section {
+            position: absolute;
+            width: 180px;
+            text-align: center;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .section:hover {
+            background: var(--hover);
+        }
+        .section.active {
+            background: var(--hover);
+        }
+
+        .section-space {
+            top: 5%;
+            left: 5%;
+        }
+        .section-time {
+            top: 5%;
+            right: 5%;
+        }
+        .section-relation {
+            bottom: 0%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-icon {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+        .section-space .section-icon { color: var(--space); }
+        .section-time .section-icon { color: var(--time); }
+        .section-relation .section-icon { color: var(--relation); }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .section-sub {
+            font-size: 13px;
+            color: var(--text2);
+        }
+
+        .section-examples {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .example-tag {
+            font-size: 12px;
+            padding: 3px 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .example-tag:hover, .example-tag.active {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        /* Detail Panel */
+        .detail {
+            border-top: 1px solid var(--border);
+            padding-top: 25px;
+            min-height: 180px;
+            transition: all 0.3s ease;
+        }
+        .detail-empty {
+            text-align: center;
+            color: var(--text3);
+            font-style: italic;
+            padding: 40px 0;
+        }
+        .detail-content {
+            display: none;
+        }
+        .detail-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .detail-word {
+            font-size: 28px;
+            font-weight: 500;
+        }
+        .detail-reading {
+            font-size: 16px;
+            color: var(--text2);
+        }
+        .detail-meaning {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        .detail-note {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text2);
+            font-style: italic;
+            padding-left: 15px;
+            border-left: 2px solid var(--border);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 13px;
+            color: var(--text3);
+        }
+        .footer a {
+            color: var(--text2);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .center { width: 150px; height: 150px; padding: 10px; }
+            .center-kanji { font-size: 42px; }
+            .center-reading { font-size: 11px; }
+            .center-origin { font-size: 8px; line-height: 1.4; }
+            .section { width: 130px; padding: 8px; }
+            .section-icon { font-size: 20px; }
+            .section-title { font-size: 13px; }
+            .section-sub { font-size: 10px; }
+            .example-tag { font-size: 10px; padding: 2px 6px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ja">日本語</button>
+    </div>
+
+    <div class="container">
+        <!-- Diagram -->
+        <div class="diagram">
+            <!-- Connecting Lines -->
+            <div class="lines">
+                <svg viewBox="0 0 100 83">
+                    <line x1="25" y1="22" x2="42" y2="38" />
+                    <line x1="75" y1="22" x2="58" y2="38" />
+                    <line x1="50" y1="55" x2="50" y2="58" />
+                </svg>
+            </div>
+
+            <!-- Center -->
+            <div class="center">
+                <span class="center-kanji">間</span>
+                <span class="center-reading">Ma · ま</span>
+                <span class="center-origin" data-en="門 (gate) + 月 (moon) — moonlight through a gate. Space and time in one character." data-ja="門＋月 — 門越しの月光。空間と時間を一文字に内包。">門 (gate) + 月 (moon) — moonlight through a gate. Space and time in one character.</span>
+            </div>
+
+            <!-- Space/Room Section -->
+            <div class="section section-space" data-category="space">
+                <div class="section-icon">◯</div>
+                <div class="section-title" data-en="Space / Room" data-ja="空間 / 部屋">Space / Room</div>
+                <div class="section-sub" data-en="gap between things" data-ja="物と物の隙間">gap between things</div>
+                <div class="section-examples">
+                    <span class="example-tag" data-word="doma">土間</span>
+                    <span class="example-tag" data-word="ima">居間</span>
+                    <span class="example-tag" data-word="kyakuma">客間</span>
+                    <span class="example-tag" data-word="tokonoma">床の間</span>
+                    <span class="example-tag" data-word="kukan">空間</span>
+                </div>
+            </div>
+
+            <!-- Time/Interval Section -->
+            <div class="section section-time" data-category="time">
+                <div class="section-icon">◷</div>
+                <div class="section-title" data-en="Interval / Time" data-ja="間隔 / 時間">Interval / Time</div>
+                <div class="section-sub" data-en="pause between moments" data-ja="瞬間と瞬間の間">pause between moments</div>
+                <div class="section-examples">
+                    <span class="example-tag" data-word="jikan">時間</span>
+                    <span class="example-tag" data-word="aida">合間</span>
+                    <span class="example-tag" data-word="maai">間合い</span>
+                    <span class="example-tag" data-word="ma">間</span>
+                </div>
+            </div>
+
+            <!-- Relationship Section -->
+            <div class="section section-relation" data-category="relation">
+                <div class="section-icon">∞</div>
+                <div class="section-title" data-en="Relationship" data-ja="関係性">Relationship</div>
+                <div class="section-sub" data-en="being-between" data-ja="間に在ること">being-between</div>
+                <div class="section-examples">
+                    <span class="example-tag" data-word="ningen">人間</span>
+                    <span class="example-tag" data-word="seken">世間</span>
+                    <span class="example-tag" data-word="nakama">仲間</span>
+                    <span class="example-tag" data-word="manuke">間抜け</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Panel -->
+        <div class="detail">
+            <div class="detail-empty" data-en="Click a word to see its meaning" data-ja="言葉をクリックすると意味が表示されます">Click a word to see its meaning</div>
+            
+            <!-- Space words -->
+            <div class="detail-content" data-word="doma">
+                <div class="detail-header">
+                    <span class="detail-word">土間</span>
+                    <span class="detail-reading">doma</span>
+                </div>
+                <div class="detail-meaning" data-en="Earthen-floor workspace. The transitional space between outside and inside, where shoes are removed." data-ja="土の床を持つ作業空間。外と内の境界にあり、靴を脱ぐ場所。">Earthen-floor workspace. The transitional space between outside and inside, where shoes are removed.</div>
+                <div class="detail-note" data-en="間 as the threshold space — neither fully outside nor inside." data-ja="間は閾（しきい）の空間として — 完全な外でも内でもない。">間 as the threshold space — neither fully outside nor inside.</div>
+            </div>
+
+            <div class="detail-content" data-word="ima">
+                <div class="detail-header">
+                    <span class="detail-word">居間</span>
+                    <span class="detail-reading">ima</span>
+                </div>
+                <div class="detail-meaning" data-en="Living room. Literally 'being-space' — where one dwells and exists." data-ja="リビングルーム。文字通り「居る間」— 住まい、存在する空間。">Living room. Literally 'being-space' — where one dwells and exists.</div>
+                <div class="detail-note" data-en="間 defines where life unfolds." data-ja="間は生活が展開する場所を定義する。">間 defines where life unfolds.</div>
+            </div>
+
+            <div class="detail-content" data-word="kyakuma">
+                <div class="detail-header">
+                    <span class="detail-word">客間</span>
+                    <span class="detail-reading">kyakuma</span>
+                </div>
+                <div class="detail-meaning" data-en="Guest room. A dedicated space for receiving visitors, often more formal than the family living areas." data-ja="客室。来客を迎えるための専用空間。家族の居間より格式高いことが多い。">Guest room. A dedicated space for receiving visitors, often more formal than the family living areas.</div>
+                <div class="detail-note" data-en="間 as social architecture — space shaped by relationship." data-ja="間は社会的建築として — 関係性によって形作られる空間。">間 as social architecture — space shaped by relationship.</div>
+            </div>
+
+            <div class="detail-content" data-word="tokonoma">
+                <div class="detail-header">
+                    <span class="detail-word">床の間</span>
+                    <span class="detail-reading">tokonoma</span>
+                </div>
+                <div class="detail-meaning" data-en="Alcove in a Japanese room, displaying a scroll or flower arrangement. The most honored space, where guests are seated facing it." data-ja="和室の床柱のある一角。掛軸や花を飾る。最も格式高い空間で、客人はこれに向かって座る。">Alcove in a Japanese room, displaying a scroll or flower arrangement. The most honored space, where guests are seated facing it.</div>
+                <div class="detail-note" data-en="間 as negative space with presence — empty yet full of meaning." data-ja="間は存在感を持つ負の空間として — 空でありながら意味に満ちている。">間 as negative space with presence — empty yet full of meaning.</div>
+            </div>
+
+            <div class="detail-content" data-word="kukan">
+                <div class="detail-header">
+                    <span class="detail-word">空間</span>
+                    <span class="detail-reading">kūkan</span>
+                </div>
+                <div class="detail-meaning" data-en="Space. Literally 'emptiness-between' — the void that exists between things." data-ja="Space。文字通り「空の間」— 物と物の間に存在する空虚。">Space. Literally 'emptiness-between' — the void that exists between things.</div>
+                <div class="detail-note" data-en="間 names the interval itself, not the things that bound it." data-ja="間は間隔そのものに名前を与える。それを囲むものではなく。">間 names the interval itself, not the things that bound it.</div>
+            </div>
+
+            <!-- Time words -->
+            <div class="detail-content" data-word="jikan">
+                <div class="detail-header">
+                    <span class="detail-word">時間</span>
+                    <span class="detail-reading">jikan</span>
+                </div>
+                <div class="detail-meaning" data-en="Time. Literally 'moment-between' — time understood as intervals, not as continuous flow." data-ja="Time。文字通り「時の間」— 連続的な流れではなく、間隔として理解された時間。">Time. Literally 'moment-between' — time understood as intervals, not as continuous flow.</div>
+                <div class="detail-note" data-en="間 reveals time as structured by pauses, not just duration." data-ja="間は時間を、持続だけでなく、休止によって構造化されたものとして明かす。">間 reveals time as structured by pauses, not just duration.</div>
+            </div>
+
+            <div class="detail-content" data-word="aida">
+                <div class="detail-header">
+                    <span class="detail-word">合間</span>
+                    <span class="detail-reading">aima</span>
+                </div>
+                <div class="detail-meaning" data-en="A break, an interval, spare time between activities. The gap that opens between one thing and the next." data-ja="休憩、間隔、活動と活動の間の空き時間。ひとつの事柄と次の事柄の間に開く隙間。">A break, an interval, spare time between activities. The gap that opens between one thing and the next.</div>
+                <div class="detail-note" data-en="間 as opportunity — the space where choice becomes possible." data-ja="間は機会として — 選択が可能になる空間。">間 as opportunity — the space where choice becomes possible.</div>
+            </div>
+
+            <div class="detail-content" data-word="maai">
+                <div class="detail-header">
+                    <span class="detail-word">間合い</span>
+                    <span class="detail-reading">maai</span>
+                </div>
+                <div class="detail-meaning" data-en="Combative distance. In martial arts, the precise spacing between opponents — close enough to strike, far enough to react." data-ja="戦闘距離。武道において、相手との正確な間隔 — 打てる距離であり、反応できる距離。">Combative distance. In martial arts, the precise spacing between opponents — close enough to strike, far enough to react.</div>
+                <div class="detail-note" data-en="間 as charged tension — relaxed but ready, 'murderous calm.'" data-ja="間は張り詰めた緊張として — 力を抜きながら構えている、「殺気立った感覚」。">間 as charged tension — relaxed but ready, 'murderous calm.'</div>
+            </div>
+
+            <div class="detail-content" data-word="ma">
+                <div class="detail-header">
+                    <span class="detail-word">間</span>
+                    <span class="detail-reading">ma</span>
+                </div>
+                <div class="detail-meaning" data-en="Pause, timing, the pregnant moment. In performance arts (rakugo, Noh, comedy), the silence that gives shape to what comes next." data-ja="間（ま）、タイミング、含みのある瞬間。落語、能、漫才などの芸能において、次に来るものに形を与える沈黙。">Pause, timing, the pregnant moment. In performance arts (rakugo, Noh, comedy), the silence that gives shape to what comes next.</div>
+                <div class="detail-note" data-en="間 in its purest form — the interval that contains everything." data-ja="間の最も純粋な形 — すべてを含む間隔。">間 in its purest form — the interval that contains everything.</div>
+            </div>
+
+            <!-- Relationship words -->
+            <div class="detail-content" data-word="ningen">
+                <div class="detail-header">
+                    <span class="detail-word">人間</span>
+                    <span class="detail-reading">ningen</span>
+                </div>
+                <div class="detail-meaning" data-en="Human being. In Chinese (人间 rénjiān), this means 'the human world' — a place. In Japanese, it means the person themselves. Japan redefined 'human' as something that exists in the interval." data-ja="人間。中国語（人间 rénjiān）では「人の世」という場所を意味する。日本語では人そのものを意味する。日本は「人」を間の中に存在するものとして再定義した。">Human being. In Chinese (人间 rénjiān), this means 'the human world' — a place. In Japanese, it means the person themselves. Japan redefined 'human' as something that exists in the interval.</div>
+                <div class="detail-note" data-en="間 as ontology — to be human is to be constituted by relationship." data-ja="間は存在論として — 人間であることは、関係性によって構成されること。">間 as ontology — to be human is to be constituted by relationship.</div>
+            </div>
+
+            <div class="detail-content" data-word="seken">
+                <div class="detail-header">
+                    <span class="detail-word">世間</span>
+                    <span class="detail-reading">seken</span>
+                </div>
+                <div class="detail-meaning" data-en="Society, the social world. Not 'the worldly realm' but the web of social relations itself — what others think, communal judgment, shared reality." data-ja="社会、世間。「世俗の領域」ではなく、社会的関係の網そのもの — 他者の目、共同体の判断、共有された現実。">Society, the social world. Not 'the worldly realm' but the web of social relations itself — what others think, communal judgment, shared reality.</div>
+                <div class="detail-note" data-en="間 as the space between selves that forms collective reality." data-ja="間は自己と自己の間の空間として、集合的現実を形成する。">間 as the space between selves that forms collective reality.</div>
+            </div>
+
+            <div class="detail-content" data-word="nakama">
+                <div class="detail-header">
+                    <span class="detail-word">仲間</span>
+                    <span class="detail-reading">nakama</span>
+                </div>
+                <div class="detail-meaning" data-en="Companion, comrade, peer. Not 'someone in your circle' but the relationship-between that makes companionship possible." data-ja="仲間、同志、同輩。「あなたの輪の中の誰か」ではなく、仲間関係を可能にする間そのもの。">Companion, comrade, peer. Not 'someone in your circle' but the relationship-between that makes companionship possible.</div>
+                <div class="detail-note" data-en="間 names the bond, not the individuals it connects." data-ja="間は絆に名前を与える。それが繋ぐ個人ではなく。">間 names the bond, not the individuals it connects.</div>
+            </div>
+
+            <div class="detail-content" data-word="manuke">
+                <div class="detail-header">
+                    <span class="detail-word">間抜け</span>
+                    <span class="detail-reading">manuke</span>
+                </div>
+                <div class="detail-meaning" data-en="Fool, idiot. Literally 'missing 間' — to lack the interval is to be disconnected from timing, from others, from the fabric of things." data-ja="愚か者、間抜け。文字通り「間が抜けた」— 間隔を欠くとは、タイミングから、他者から、物事の織物から切り離されること。">Fool, idiot. Literally 'missing 間' — to lack the interval is to be disconnected from timing, from others, from the fabric of things.</div>
+                <div class="detail-note" data-en="間 by its absence — without it, one is adrift." data-ja="間の不在によって — それなしでは、人は漂流する。">間 by its absence — without it, one is adrift.</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <span data-en="From" data-ja="記事">From</span> <a href="#" data-en="'Ma Is Not About Empty Space'" data-ja="「間は空虚の話ではない」">'Ma Is Not About Empty Space'</a> · floclo · 2026
+        </footer>
+    </div>
+
+    <script>
+        // Language switching
+        let currentLang = 'en';
+        const langBtns = document.querySelectorAll('.lang-btn');
+        
+        langBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                langBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLang = btn.dataset.lang;
+                updateLanguage();
+            });
+        });
+
+        function updateLanguage() {
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.textContent = el.dataset[currentLang];
+            });
+        }
+
+        // Word selection
+        const exampleTags = document.querySelectorAll('.example-tag');
+        const detailContents = document.querySelectorAll('.detail-content');
+        const detailEmpty = document.querySelector('.detail-empty');
+
+        exampleTags.forEach(tag => {
+            tag.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const word = tag.dataset.word;
+                
+                // Update active states
+                exampleTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                
+                // Show detail
+                detailEmpty.style.display = 'none';
+                detailContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.dataset.word === word) {
+                        content.classList.add('active');
+                    }
+                });
+                
+                // Update language for newly shown content
+                updateLanguage();
+            });
+        });
+
+        // Section click to show first word
+        document.querySelectorAll('.section').forEach(section => {
+            section.addEventListener('click', (e) => {
+                if (e.target.classList.contains('example-tag')) return;
+                const firstTag = section.querySelector('.example-tag');
+                if (firstTag) firstTag.click();
+            });
+        });
+    </script>
+</body>
+</html>
