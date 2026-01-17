@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Kata Actually Is | 型とは何か</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1a1a;
+            --ink-light: #4a4a4a;
+            --ink-faint: #9a9a9a;
+            --paper: #f7f5f0;
+            --paper-dark: #e8e4db;
+            --accent: #2d5a3d;
+            --body-color: #8b5a2b;
+            --mind-color: #1a4a6e;
+            --mind-free: #4a90b8;
+            --space-color: #6b5b7a;
+            --time-color: #7a6b5b;
+            --relation-color: #5b6b7a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--paper);
+            color: var(--ink);
+            min-height: 100vh;
+            padding: 2rem 1rem 3rem;
+        }
+
+        .lang-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            z-index: 100;
+        }
+
+        .lang-toggle button {
+            background: none;
+            border: 1px solid var(--ink-faint);
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-family: inherit;
+            color: var(--ink-light);
+            transition: all 0.2s;
+        }
+
+        .lang-toggle button.active {
+            background: var(--ink);
+            color: var(--paper);
+            border-color: var(--ink);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        .jp-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.9rem;
+            color: var(--ink-light);
+            margin-top: 0.2rem;
+        }
+
+        .diagram {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Top section: funnel */
+        .top-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 0;
+        }
+
+        .funnel-svg {
+            width: 360px;
+            height: 180px;
+        }
+
+        /* Main comparison area with SVG overlay */
+        .main-section {
+            position: relative;
+        }
+
+        .connection-svg {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Side columns */
+        .columns {
+            display: grid;
+            grid-template-columns: 1fr 100px 1fr;
+            gap: 0;
+        }
+
+        .side {
+            padding: 1.2rem;
+        }
+
+        .side-label {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--paper-dark);
+        }
+
+        .side-label .jp {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.8rem;
+            color: var(--ink-light);
+            display: block;
+            font-weight: 400;
+        }
+
+        .side.before {
+            background: rgba(0,0,0,0.02);
+        }
+
+        .side.after {
+            background: rgba(45, 90, 61, 0.04);
+        }
+
+        .center-spacer {
+            /* Empty space for the SVG connections */
+        }
+
+        /* Body-Mind boxes */
+        .body-mind-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .layer-box {
+            border: 1px solid var(--paper-dark);
+            background: white;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .layer-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--ink-faint);
+            margin-bottom: 0.5rem;
+        }
+
+        .layer-content {
+            font-size: 0.9rem;
+            color: var(--ink-light);
+            line-height: 1.5;
+        }
+
+        .layer-box.body {
+            border-left: 3px solid var(--body-color);
+        }
+
+        .layer-box.body .layer-label {
+            color: var(--body-color);
+        }
+
+        .layer-box.mind {
+            border-left: 3px solid var(--mind-color);
+        }
+
+        .layer-box.mind .layer-label {
+            color: var(--mind-color);
+        }
+
+        .side.after .layer-box.body {
+            background: rgba(45, 90, 61, 0.06);
+            border-color: var(--accent);
+            border-left: 3px solid var(--accent);
+        }
+
+        .side.after .layer-box.mind {
+            border-left: 3px solid var(--mind-free);
+        }
+
+        .side.after .layer-box.mind .layer-label {
+            color: var(--mind-free);
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.4rem;
+            margin-right: 0.3rem;
+            margin-bottom: 0.3rem;
+            border-radius: 2px;
+        }
+
+        .tag.kata {
+            background: var(--accent);
+            color: white;
+        }
+
+        .tag.wisdom {
+            background: var(--body-color);
+            color: white;
+        }
+
+        .tag.empty {
+            background: transparent;
+            border: 1px dashed var(--ink-faint);
+            color: var(--ink-faint);
+        }
+
+        .tag.new {
+            background: var(--mind-free);
+            color: white;
+        }
+
+        .status {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: var(--ink-faint);
+            margin-top: 0.5rem;
+        }
+
+        .status.chaos {
+            color: #a05050;
+        }
+
+        .status.free {
+            color: var(--mind-free);
+        }
+
+        /* Constraints taxonomy section */
+        .taxonomy-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.02);
+            border-top: 1px solid var(--paper-dark);
+        }
+
+        .taxonomy-title {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .taxonomy-subtitle {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--ink-faint);
+            margin-bottom: 1rem;
+        }
+
+        .taxonomy-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--ink-faint);
+            margin-bottom: 1.2rem;
+        }
+
+        .taxonomy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .taxonomy-column {
+            text-align: center;
+        }
+
+        .taxonomy-header {
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.5rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 2px solid;
+        }
+
+        .taxonomy-header.space {
+            border-color: var(--space-color);
+            color: var(--space-color);
+        }
+
+        .taxonomy-header.time {
+            border-color: var(--time-color);
+            color: var(--time-color);
+        }
+
+        .taxonomy-header.relation {
+            border-color: var(--relation-color);
+            color: var(--relation-color);
+        }
+
+        .taxonomy-header .jp {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 400;
+            display: block;
+        }
+
+        .taxonomy-items {
+            font-size: 0.8rem;
+            color: var(--ink-light);
+            line-height: 1.8;
+        }
+
+        .taxonomy-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .taxonomy-item .icon {
+            font-size: 0.9rem;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--ink-faint);
+        }
+
+        footer a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        [data-lang="jp"] { display: none; }
+        body.jp [data-lang="en"] { display: none; }
+        body.jp [data-lang="jp"] { display: inline; }
+        body.jp div[data-lang="jp"] { display: block; }
+
+        @media (max-width: 700px) {
+            .columns {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .center-spacer {
+                display: none;
+            }
+            .connection-svg {
+                display: none;
+            }
+            .taxonomy-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-toggle">
+        <button class="active" onclick="setLang('en')">EN</button>
+        <button onclick="setLang('jp')">日本語</button>
+    </div>
+
+    <header>
+        <h1>
+            <span data-lang="en">What Kata Actually Is</span>
+            <span data-lang="jp">型とは何か</span>
+        </h1>
+        <div class="jp-title" data-lang="en">型とは何か</div>
+    </header>
+
+    <div class="diagram">
+        <!-- Funnel at top -->
+        <div class="top-section">
+            <svg class="funnel-svg" viewBox="0 0 360 180">
+                <!-- Input labels outside funnel - left -->
+                <text x="25" y="28" font-family="Cormorant Garamond, serif" font-size="10" fill="var(--ink-light)" text-anchor="start">
+                    <tspan data-lang="en">trial &amp; error</tspan>
+                    <tspan data-lang="jp">試行錯誤</tspan>
+                </text>
+                <text x="25" y="43" font-family="Cormorant Garamond, serif" font-size="10" fill="var(--ink-light)" text-anchor="start">
+                    <tspan data-lang="en">generations</tspan>
+                    <tspan data-lang="jp">世代</tspan>
+                </text>
+                <text x="25" y="58" font-family="Cormorant Garamond, serif" font-size="10" fill="var(--ink-light)" text-anchor="start">
+                    <tspan data-lang="en">experience</tspan>
+                    <tspan data-lang="jp">経験</tspan>
+                </text>
+
+                <!-- Input labels outside funnel - right -->
+                <text x="335" y="28" font-family="Cormorant Garamond, serif" font-size="10" fill="var(--ink-light)" text-anchor="end">
+                    <tspan data-lang="en">time</tspan>
+                    <tspan data-lang="jp">時間</tspan>
+                </text>
+                <text x="335" y="43" font-family="Cormorant Garamond, serif" font-size="10" fill="var(--ink-light)" text-anchor="end">
+                    <tspan data-lang="en">refinement</tspan>
+                    <tspan data-lang="jp">洗練</tspan>
+                </text>
+                <text x="335" y="58" font-family="Cormorant Garamond, serif" font-size="10" fill="var(--ink-light)" text-anchor="end">
+                    <tspan data-lang="en">selection</tspan>
+                    <tspan data-lang="jp">淘汰</tspan>
+                </text>
+
+                <!-- Arrows into funnel -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                        <path d="M 0 0 L 6 3 L 0 6 Z" fill="var(--ink-faint)"/>
+                    </marker>
+                </defs>
+                <path d="M 65 38 L 95 50" stroke="var(--ink-faint)" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+                <path d="M 295 38 L 265 50" stroke="var(--ink-faint)" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Funnel shape -->
+                <path d="M 90 45 
+                         L 270 45 
+                         L 270 58
+                         L 198 90
+                         L 198 130
+                         L 162 130
+                         L 162 90
+                         L 90 58
+                         Z" 
+                      fill="rgba(45, 90, 61, 0.08)" 
+                      stroke="var(--accent)" 
+                      stroke-width="1.5"/>
+
+                <!-- Distillation label -->
+                <text x="180" y="72" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" font-style="italic" fill="var(--ink-light)">
+                    <tspan data-lang="en">distillation</tspan>
+                    <tspan data-lang="jp">蒸留</tspan>
+                </text>
+
+                <!-- Animated drops -->
+                <circle cx="160" cy="82" r="2" fill="var(--accent)" opacity="0.5">
+                    <animate attributeName="cy" values="82;105;82" dur="1.8s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="180" cy="85" r="2" fill="var(--accent)" opacity="0.6">
+                    <animate attributeName="cy" values="85;108;85" dur="2.2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="200" cy="82" r="2" fill="var(--accent)" opacity="0.5">
+                    <animate attributeName="cy" values="82;105;82" dur="2s" repeatCount="indefinite"/>
+                </circle>
+
+                <!-- Output box: Kata + Wisdom -->
+                <rect x="140" y="135" width="80" height="40" fill="var(--accent)" rx="2"/>
+                <text x="180" y="155" text-anchor="middle" font-family="Noto Serif JP, serif" font-size="16" fill="white">型</text>
+                <text x="180" y="168" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="8" fill="rgba(255,255,255,0.85)">
+                    <tspan data-lang="en">form + wisdom</tspan>
+                    <tspan data-lang="jp">形と知恵</tspan>
+                </text>
+            </svg>
+        </div>
+
+        <!-- Main section with overlay SVG for connections -->
+        <div class="main-section">
+            <!-- SVG for arrows connecting bodies through center -->
+            <svg class="connection-svg" viewBox="0 0 900 280" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <marker id="arrowhead-green-sm" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                        <path d="M 0 0 L 6 3 L 0 6 Z" fill="var(--accent)"/>
+                    </marker>
+                    <!-- Arrowhead for circular path -->
+                    <marker id="arrowhead-circle" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
+                        <path d="M 0 0 L 4 2 L 0 4 Z" fill="var(--accent)"/>
+                    </marker>
+                </defs>
+
+                <!-- Arrow from funnel down to center circle -->
+                <path d="M 450 0 L 450 115" stroke="var(--accent)" stroke-width="1.5" fill="none" marker-end="url(#arrowhead-green-sm)"/>
+                
+                <!-- Center cyclic circle -->
+                <circle cx="450" cy="148" r="26" fill="rgba(45, 90, 61, 0.1)" stroke="var(--accent)" stroke-width="1.5"/>
+                
+                <!-- Single circular arrow with arrowhead, rotating -->
+                <g>
+                    <path d="M 450 134 
+                             A 14 14 0 1 1 436 148" 
+                          fill="none" 
+                          stroke="var(--accent)" 
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          marker-end="url(#arrowhead-circle)"
+                          transform="translate(450, 148) rotate(0) translate(-450, -148)">
+                        <animateTransform 
+                            attributeName="transform" 
+                            type="rotate" 
+                            from="0 450 148" 
+                            to="360 450 148" 
+                            dur="4s" 
+                            repeatCount="indefinite"/>
+                    </path>
+                </g>
+
+                <!-- Shorter, thinner horizontal arrows -->
+                <!-- Left body to center -->
+                <line x1="280" y1="148" x2="418" y2="148" stroke="var(--accent)" stroke-width="1" marker-end="url(#arrowhead-green-sm)"/>
+                
+                <!-- Center to right body -->
+                <line x1="482" y1="148" x2="620" y2="148" stroke="var(--accent)" stroke-width="1" marker-end="url(#arrowhead-green-sm)"/>
+            </svg>
+
+            <div class="columns">
+                <!-- BEFORE: Infinite Possibility -->
+                <div class="side before">
+                    <div class="side-label">
+                        <span data-lang="en">Infinite Possibility</span>
+                        <span data-lang="jp">無限の可能性</span>
+                        <span class="jp" data-lang="en">無限の可能性</span>
+                    </div>
+
+                    <div class="body-mind-container">
+                        <div class="layer-box body" id="body-before">
+                            <div class="layer-label">
+                                <span data-lang="en">Body</span>
+                                <span data-lang="jp">身体</span>
+                            </div>
+                            <div class="layer-content">
+                                <span class="tag empty">
+                                    <span data-lang="en">no form</span>
+                                    <span data-lang="jp">形なし</span>
+                                </span>
+                                <span class="tag empty">
+                                    <span data-lang="en">no pattern</span>
+                                    <span data-lang="jp">パターンなし</span>
+                                </span>
+                            </div>
+                            <div class="status">
+                                <span data-lang="en">Every action requires decision</span>
+                                <span data-lang="jp">すべての動作に判断が必要</span>
+                            </div>
+                        </div>
+
+                        <div class="layer-box mind">
+                            <div class="layer-label">
+                                <span data-lang="en">Mind</span>
+                                <span data-lang="jp">心</span>
+                            </div>
+                            <div class="layer-content">
+                                <span data-lang="en">Occupied with basics</span>
+                                <span data-lang="jp">基本動作に占有される</span>
+                            </div>
+                            <div class="status chaos">
+                                <span data-lang="en">→ Paralysis or chaos</span>
+                                <span data-lang="jp">→ 麻痺、あるいは混乱</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CENTER spacer -->
+                <div class="center-spacer"></div>
+
+                <!-- AFTER: Freedom -->
+                <div class="side after">
+                    <div class="side-label">
+                        <span data-lang="en">Freedom</span>
+                        <span data-lang="jp">自由</span>
+                        <span class="jp" data-lang="en">自由</span>
+                    </div>
+
+                    <div class="body-mind-container">
+                        <div class="layer-box body" id="body-after">
+                            <div class="layer-label">
+                                <span data-lang="en">Body</span>
+                                <span data-lang="jp">身体</span>
+                            </div>
+                            <div class="layer-content">
+                                <span class="tag kata">
+                                    <span data-lang="en">form</span>
+                                    <span data-lang="jp">形</span>
+                                </span>
+                                <span class="tag wisdom">
+                                    <span data-lang="en">wisdom</span>
+                                    <span data-lang="jp">知恵</span>
+                                </span>
+                                <span data-lang="en">embodied</span>
+                                <span data-lang="jp">体得済み</span>
+                            </div>
+                            <div class="status">
+                                <span data-lang="en">Automatic, no thought needed</span>
+                                <span data-lang="jp">自動化、思考不要</span>
+                            </div>
+                        </div>
+
+                        <div class="layer-box mind">
+                            <div class="layer-label">
+                                <span data-lang="en">Mind</span>
+                                <span data-lang="jp">心</span>
+                            </div>
+                            <div class="layer-content">
+                                <span class="tag new">
+                                    <span data-lang="en">new dimensions</span>
+                                    <span data-lang="jp">新しい次元</span>
+                                </span>
+                            </div>
+                            <div class="status free">
+                                <span data-lang="en">→ Freed for deeper inquiry</span>
+                                <span data-lang="jp">→ より深い探求へ解放</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Constraints Taxonomy -->
+        <div class="taxonomy-section">
+            <div class="taxonomy-title">
+                <span data-lang="en">Three Dimensions of Kata</span>
+                <span data-lang="jp">型の三つの次元</span>
+            </div>
+            <div class="taxonomy-subtitle">
+                <span data-lang="en">Constraints that liberate</span>
+                <span data-lang="jp">解放する制約</span>
+            </div>
+
+            <div class="taxonomy-legend">
+                <span>🍵 <span data-lang="en">Sadō</span><span data-lang="jp">茶道</span></span>
+                <span>✒️ <span data-lang="en">Sonnet</span><span data-lang="jp">ソネット</span></span>
+                <span>🎷 <span data-lang="en">Jazz</span><span data-lang="jp">ジャズ</span></span>
+                <span>🏛️ <span data-lang="en">Architecture</span><span data-lang="jp">建築</span></span>
+            </div>
+
+            <div class="taxonomy-grid">
+                <!-- SPACE -->
+                <div class="taxonomy-column">
+                    <div class="taxonomy-header space">
+                        <span data-lang="en">Space</span>
+                        <span data-lang="jp">空間</span>
+                        <span class="jp" data-lang="en">空間</span>
+                    </div>
+                    <div class="taxonomy-items">
+                        <div class="taxonomy-item">
+                            <span class="icon">🍵</span>
+                            <span data-lang="en">folding angle</span>
+                            <span data-lang="jp">畳み方・角度</span>
+                        </div>
+                        <div class="taxonomy-item">
+                            <span class="icon">✒️</span>
+                            <span data-lang="en">14 lines</span>
+                            <span data-lang="jp">14行</span>
+                        </div>
+                        <div class="taxonomy-item">
+                            <span class="icon">🏛️</span>
+                            <span data-lang="en">site, physics</span>
+                            <span data-lang="jp">敷地・物理</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TIME -->
+                <div class="taxonomy-column">
+                    <div class="taxonomy-header time">
+                        <span data-lang="en">Time</span>
+                        <span data-lang="jp">時間</span>
+                        <span class="jp" data-lang="en">時間</span>
+                    </div>
+                    <div class="taxonomy-items">
+                        <div class="taxonomy-item">
+                            <span class="icon">🍵</span>
+                            <span data-lang="en">steps, sequence</span>
+                            <span data-lang="jp">歩数・順序</span>
+                        </div>
+                        <div class="taxonomy-item">
+                            <span class="icon">✒️</span>
+                            <span data-lang="en">iambic meter</span>
+                            <span data-lang="jp">弱強五歩格</span>
+                        </div>
+                        <div class="taxonomy-item">
+                            <span class="icon">🎷</span>
+                            <span data-lang="en">12-bar, rhythm</span>
+                            <span data-lang="jp">12小節・リズム</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RELATION -->
+                <div class="taxonomy-column">
+                    <div class="taxonomy-header relation">
+                        <span data-lang="en">Relation</span>
+                        <span data-lang="jp">関係</span>
+                        <span class="jp" data-lang="en">関係</span>
+                    </div>
+                    <div class="taxonomy-items">
+                        <div class="taxonomy-item">
+                            <span class="icon">✒️</span>
+                            <span data-lang="en">rhyme scheme</span>
+                            <span data-lang="jp">押韻構成</span>
+                        </div>
+                        <div class="taxonomy-item">
+                            <span class="icon">🎷</span>
+                            <span data-lang="en">chord progression</span>
+                            <span data-lang="jp">コード進行</span>
+                        </div>
+                        <div class="taxonomy-item">
+                            <span class="icon">🏛️</span>
+                            <span data-lang="en">budget, code</span>
+                            <span data-lang="jp">予算・法規</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="https://github.com/floclostudio/japanese-philosophy-diagrams">floclo</a> — Visualizing invisible structures
+    </footer>
+
+    <script>
+        function setLang(lang) {
+            document.body.classList.toggle('jp', lang === 'jp');
+            document.querySelectorAll('.lang-toggle button').forEach(btn => {
+                btn.classList.toggle('active', 
+                    (lang === 'en' && btn.textContent === 'EN') ||
+                    (lang === 'jp' && btn.textContent === '日本語')
+                );
+            });
+            document.querySelectorAll('tspan[data-lang]').forEach(el => {
+                el.style.display = el.dataset.lang === lang ? 'inline' : 'none';
+            });
+        }
+
+        // Initialize SVG text
+        document.querySelectorAll('tspan[data-lang="jp"]').forEach(el => {
+            el.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
