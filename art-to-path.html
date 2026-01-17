@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>From Art to Path | 芸から道へ</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif;
+      background: #fafafa;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    /* Language Toggle */
+    .lang-toggle {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+    
+    .lang-toggle button {
+      background: none;
+      border: 1px solid #ccc;
+      padding: 5px 12px;
+      margin-left: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+    
+    .lang-toggle button.active {
+      background: #2a5a3a;
+      color: white;
+      border-color: #2a5a3a;
+    }
+    
+    .lang-toggle button:hover:not(.active) {
+      border-color: #2a5a3a;
+      color: #2a5a3a;
+    }
+    
+    /* Title */
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    /* Timeline Header */
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 0;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
+    
+    .phase {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .phase-title {
+      font-size: 11px;
+      font-style: italic;
+      color: #555;
+    }
+    
+    .phase-period {
+      font-size: 10px;
+      color: #999;
+      margin-top: 3px;
+    }
+    
+    /* Main Diagram */
+    .diagram {
+      position: relative;
+      min-height: 450px;
+      margin: 20px 0;
+    }
+    
+    /* Zen Top Section - Left aligned with L-shaped connector */
+    .zen-top {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 0;
+      padding-left: 60px;
+      position: relative;
+      height: 90px;
+    }
+    
+    /* Horizontal line from Zen */
+    .zen-line-h {
+      position: absolute;
+      top: 25px;
+      left: 170px;
+      width: calc(50% - 170px);
+      height: 3px;
+      background: #2a5a3a;
+    }
+    
+    /* Vertical line down to ellipse */
+    .zen-line-v {
+      position: absolute;
+      top: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 65px;
+      background: #2a5a3a;
+    }
+    
+    /* Arrow pointing to ellipse */
+    .zen-arrow {
+      position: absolute;
+      top: 83px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 10px solid #2a5a3a;
+    }
+    
+    /* Main Diagram Container */
+    .diagram-container {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      margin: 0 0 30px;
+      min-height: 340px;
+    }
+    
+    /* Columns */
+    .art-column, .do-column {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      justify-content: center;
+    }
+    
+    .arrow-column {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      justify-content: center;
+      padding: 0 10px;
+    }
+    
+    .ellipse-column {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+    }
+    
+    /* Zen Ellipse Gate */
+    .zen-ellipse {
+      width: 120px;
+      height: 320px;
+      background: #e8f0e8;
+      border: 2px solid #2a5a3a;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .zen-ellipse:hover {
+      background: #dce8dc;
+      box-shadow: 0 0 20px rgba(42, 90, 58, 0.2);
+      transform: scale(1.02);
+    }
+    
+    .ellipse-content {
+      text-align: center;
+      padding: 10px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    
+    .ellipse-title {
+      font-size: 13px;
+      color: #2a5a3a;
+      font-weight: 500;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    
+    .ellipse-subtitle {
+      font-size: 8px;
+      color: #2a5a3a;
+      font-style: italic;
+      writing-mode: vertical-rl;
+    }
+    
+    .ellipse-note {
+      font-size: 8px;
+      color: #666;
+      writing-mode: vertical-rl;
+    }
+    
+    /* Arrow styles */
+    .arrow-gray, .arrow-green {
+      height: 55px;
+      display: flex;
+      align-items: center;
+      width: 60px;
+    }
+    
+    .arrow-gray::before, .arrow-green::before {
+      content: '';
+      flex: 1;
+      height: 2px;
+    }
+    
+    .arrow-gray::before {
+      background: #999;
+    }
+    
+    .arrow-green::before {
+      background: #2a5a3a;
+    }
+    
+    .arrow-gray::after, .arrow-green::after {
+      content: '';
+      border: 5px solid transparent;
+    }
+    
+    .arrow-gray::after {
+      border-left-color: #999;
+    }
+    
+    .arrow-green::after {
+      border-left-color: #2a5a3a;
+    }
+    
+    /* Zen Box */
+    .zen-box {
+      cursor: pointer;
+    }
+    
+    .zen-box .box {
+      background: #2a5a3a;
+      color: white;
+      padding: 8px 25px;
+      border-radius: 4px;
+      font-size: 18px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .zen-box:hover .box {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(42, 90, 58, 0.3);
+    }
+    
+    .zen-box .label {
+      font-size: 10px;
+      color: #2a5a3a;
+      font-weight: 600;
+      margin-top: 5px;
+      text-align: center;
+    }
+    
+    /* Art & Do Boxes */
+    .art-box, .do-box {
+      width: 110px;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .art-box {
+      background: #f5f5f5;
+      border: 1px solid #bbb;
+    }
+    
+    .art-box:hover {
+      border-color: #888;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .do-box {
+      background: #2a5a3a;
+      color: white;
+    }
+    
+    .do-box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(42, 90, 58, 0.3);
+    }
+    
+    .art-box .kanji, .do-box .kanji {
+      font-size: 13px;
+    }
+    
+    .art-box .en, .do-box .en {
+      font-size: 9px;
+      margin-top: 3px;
+      opacity: 0.8;
+    }
+    
+    /* Common Pattern */
+    .common-pattern {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 30px 0 20px;
+      padding: 15px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    
+    .pattern-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .pattern-box {
+      padding: 5px 15px;
+      border-radius: 3px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    
+    .pattern-art {
+      background: #f5f5f5;
+      border: 1px solid #bbb;
+    }
+    
+    .pattern-zen {
+      background: #e8f0e8;
+      border: 1px solid #2a5a3a;
+      color: #2a5a3a;
+    }
+    
+    .pattern-do {
+      background: #2a5a3a;
+      color: white;
+    }
+    
+    .pattern-arrow {
+      color: #666;
+    }
+    
+    .pattern-note {
+      font-size: 9px;
+      color: #888;
+      margin-left: 15px;
+    }
+    
+    /* Info Panel */
+    .info-panel {
+      background: white;
+      border: 1px solid #2a5a3a;
+      border-radius: 6px;
+      padding: 20px;
+      margin: 20px 0;
+      display: none;
+    }
+    
+    .info-panel.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .info-panel h3 {
+      color: #2a5a3a;
+      font-size: 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .info-panel h3 .kanji {
+      font-size: 20px;
+    }
+    
+    .info-panel p {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    
+    .info-panel .key-figure {
+      font-size: 12px;
+      color: #2a5a3a;
+      font-style: italic;
+    }
+    
+    .info-panel .close-btn {
+      float: right;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #999;
+    }
+    
+    .info-panel .close-btn:hover {
+      color: #333;
+    }
+    
+    /* Hint */
+    .hint {
+      text-align: center;
+      font-size: 11px;
+      color: #888;
+      margin: 15px 0;
+    }
+    
+    /* Sources */
+    .sources {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+    
+    .sources h4 {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    
+    .sources ul {
+      list-style: none;
+      font-size: 11px;
+      color: #888;
+    }
+    
+    .sources li {
+      margin: 5px 0;
+    }
+    
+    .sources a {
+      color: #2a5a3a;
+      text-decoration: none;
+    }
+    
+    .sources a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      font-size: 11px;
+      color: #999;
+    }
+    
+    /* Language-specific display */
+    .en-only { display: inline; }
+    .ja-only { display: none; }
+    
+    body.ja .en-only { display: none; }
+    body.ja .ja-only { display: inline; }
+  </style>
+</head>
+<body>
+  
+  <div class="lang-toggle">
+    <button id="btn-en" class="active">English</button>
+    <button id="btn-ja">日本語</button>
+  </div>
+  
+  <header>
+    <h1>
+      <span class="en-only">From Art to Path: The Transformation Through Zen</span>
+      <span class="ja-only">芸から道へ — 禅という場をくぐり抜けた変容</span>
+    </h1>
+    <p class="subtitle">
+      <span class="en-only">How Zen transformed Japanese arts into paths of self-cultivation</span>
+      <span class="ja-only">禅がいかにして日本の芸を自己修養の道へ変容させたか</span>
+    </p>
+  </header>
+  
+  <div class="timeline-header">
+    <div class="phase">
+      <div class="phase-title">
+        <span class="en-only">Original Art</span>
+        <span class="ja-only">元々の芸</span>
+      </div>
+      <div class="phase-period">
+        <span class="en-only">Heian – Kamakura</span>
+        <span class="ja-only">平安〜鎌倉</span>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-title">
+        <span class="en-only">Zen Influence & Cross-Pollination</span>
+        <span class="ja-only">禅の影響と相互交流</span>
+      </div>
+      <div class="phase-period">
+        <span class="en-only">Muromachi (15c)</span>
+        <span class="ja-only">室町（15世紀）</span>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-title">
+        <span class="en-only">Path (Dō)</span>
+        <span class="ja-only">「道」</span>
+      </div>
+      <div class="phase-period">
+        <span class="en-only">Edo – Modern</span>
+        <span class="ja-only">江戸〜現代</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Zen Box at top left with L-shaped connector -->
+  <div class="zen-top">
+    <div class="zen-box" data-info="zen">
+      <div class="box">禅</div>
+      <div class="label">ZEN arrives 1191</div>
+    </div>
+    <div class="zen-line-h"></div>
+    <div class="zen-line-v"></div>
+    <div class="zen-arrow"></div>
+  </div>
+  
+  <!-- Main Diagram Container -->
+  <div class="diagram-container">
+    <!-- Left Column: Art boxes -->
+    <div class="art-column">
+      <div class="art-box" data-info="tea-art">
+        <div class="kanji">喫茶・闘茶</div>
+        <div class="en">Tea / Contests</div>
+      </div>
+      
+      <div class="art-box" data-info="poetry-art">
+        <div class="kanji">和歌・連歌</div>
+        <div class="en">Poetry / Renga</div>
+      </div>
+      
+      <div class="art-box" data-info="martial-art">
+        <div class="kanji">武術・剣術</div>
+        <div class="en">Martial Arts</div>
+      </div>
+      
+      <div class="art-box" data-info="noh-art">
+        <div class="kanji">散楽・猿楽</div>
+        <div class="en">Sarugaku</div>
+      </div>
+    </div>
+    
+    <!-- Left Arrows -->
+    <div class="arrow-column">
+      <div class="arrow-gray"></div>
+      <div class="arrow-gray"></div>
+      <div class="arrow-gray"></div>
+      <div class="arrow-gray"></div>
+    </div>
+    
+    <!-- Center: Zen Ellipse Gate -->
+    <div class="ellipse-column">
+      <div class="zen-ellipse" data-info="dobo">
+        <div class="ellipse-content">
+          <div class="ellipse-title">禅の影響圏</div>
+          <div class="ellipse-subtitle">"Muromachi Salon"</div>
+          <div class="ellipse-note">同朋衆 Dōbōshū</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Arrows -->
+    <div class="arrow-column">
+      <div class="arrow-green"></div>
+      <div class="arrow-green"></div>
+      <div class="arrow-green"></div>
+      <div class="arrow-green"></div>
+    </div>
+    
+    <!-- Right Column: Dō boxes -->
+    <div class="do-column">
+      <div class="do-box" data-info="tea-do">
+        <div class="kanji">茶道</div>
+        <div class="en">Chadō</div>
+      </div>
+      
+      <div class="do-box" data-info="poetry-do">
+        <div class="kanji">歌道</div>
+        <div class="en">Kadō</div>
+      </div>
+      
+      <div class="do-box" data-info="martial-do">
+        <div class="kanji">武道</div>
+        <div class="en">Budō</div>
+      </div>
+      
+      <div class="do-box" data-info="noh-do">
+        <div class="kanji">能道</div>
+        <div class="en">Nōdō</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Info Panel -->
+  <div class="info-panel" id="info-panel">
+    <button class="close-btn" onclick="closeInfo()">×</button>
+    <h3><span class="kanji" id="info-kanji"></span> <span id="info-title"></span></h3>
+    <p id="info-text"></p>
+    <p class="key-figure" id="info-figure"></p>
+  </div>
+  
+  <p class="hint">
+    <span class="en-only">Click on any element to see details</span>
+    <span class="ja-only">各要素をクリックすると詳細が表示されます</span>
+  </p>
+  
+  <!-- Common Pattern -->
+  <div class="common-pattern">
+    <span class="pattern-label">
+      <span class="en-only">Common Pattern:</span>
+      <span class="ja-only">共通パターン：</span>
+    </span>
+    <span class="pattern-box pattern-art">芸</span>
+    <span class="pattern-arrow">→</span>
+    <span class="pattern-box pattern-zen">＋禅</span>
+    <span class="pattern-arrow">→</span>
+    <span class="pattern-box pattern-do">道</span>
+    <span class="pattern-note">
+      <span class="en-only">cf. Impressionists at Café Guerbois / Vienna Circle at Café Central</span>
+      <span class="ja-only">cf. カフェ・ゲルボワの印象派 / カフェ・ツェントラルのウィーン学団</span>
+    </span>
+  </div>
+  
+  <!-- Sources -->
+  <div class="sources">
+    <h4>
+      <span class="en-only">Sources</span>
+      <span class="ja-only">出典</span>
+    </h4>
+    <ul>
+      <li><a href="https://ja.wikipedia.org/wiki/%E5%90%8C%E6%9C%8B%E8%A1%86" target="_blank">同朋衆 (Wikipedia)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Murata_Juk%C5%8D" target="_blank">Murata Jukō (Wikipedia)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Zeami_Motokiyo" target="_blank">Zeami Motokiyo (Wikipedia)</a></li>
+      <li><a href="https://plato.stanford.edu/entries/japanese-philosophy/" target="_blank">Japanese Philosophy (Stanford Encyclopedia)</a></li>
+    </ul>
+  </div>
+  
+  <footer>
+    floclo — 
+    <span class="en-only">Visualizing invisible structures</span>
+    <span class="ja-only">見えない構造を描く試み</span>
+  </footer>
+  
+  <script>
+    // Info data
+    const infoData = {
+      en: {
+        'zen': {
+          kanji: '禅',
+          title: 'Zen Buddhism',
+          text: 'Brought to Japan by monk Eisai in 1191 from Song China. Zen carried the concept of "practice" (shugyō)—sitting in zazen, working on kōans, making every daily action into practice. For 300 years, Zen spread through monasteries while arts remained entertainment. The fusion happened in the 15th century.',
+          figure: 'Key figure: Eisai (栄西), 1141-1215'
+        },
+        'tea-art': {
+          kanji: '喫茶',
+          title: 'Tea Drinking & Contests',
+          text: 'Tea arrived with Zen but remained separate for centuries. In the Heian period, it was medicine. By Kamakura, it became entertainment—tōcha contests where warriors wagered on identifying tea origins. Pure amusement, no spiritual dimension.',
+          figure: ''
+        },
+        'tea-do': {
+          kanji: '茶道',
+          title: 'The Way of Tea (Chadō)',
+          text: 'Murata Jukō studied Zen under the iconoclastic monk Ikkyū and attained "Chazen Ichimi"—the unity of tea and Zen. "The Buddha\'s teaching exists within the Way of Tea." Making tea became equivalent to zazen. Perfected by Sen no Rikyū.',
+          figure: 'Key figures: Murata Jukō (珠光) → Takeno Jōō (武野紹鷗) → Sen no Rikyū (千利休)'
+        },
+        'poetry-art': {
+          kanji: '和歌',
+          title: 'Court Poetry & Renga',
+          text: 'Waka poetry was refined court literature since the Heian period. Renga (linked verse) emerged in Kamakura as a social game—poets taking turns adding verses. Technically sophisticated but primarily entertainment.',
+          figure: ''
+        },
+        'poetry-do': {
+          kanji: '歌道',
+          title: 'The Way of Poetry (Kadō)',
+          text: 'The poet-monk Shinke developed the aesthetic of "hie-kareru" (cold and withered)—finding beauty in desolation. This Zen-influenced sensibility transformed poetry from craft to spiritual path. Shinke\'s philosophy directly influenced Jukō\'s tea.',
+          figure: 'Key figure: Shinke (心敬), 1406-1475'
+        },
+        'martial-art': {
+          kanji: '武術',
+          title: 'Martial Techniques',
+          text: 'Combat skills for samurai—practical techniques for killing. Swordsmanship, archery, horsemanship developed as battlefield necessities. The goal was victory, not transformation.',
+          figure: ''
+        },
+        'martial-do': {
+          kanji: '武道',
+          title: 'The Way of the Warrior (Budō)',
+          text: 'The Zen monk Takuan wrote "The Unfettered Mind" for the swordsman Yagyū Munenori, teaching "Ken-Zen Icchi" (sword and Zen as one). The sword becomes a tool for cutting through ego, not enemies. "Katsujinken"—the life-giving sword.',
+          figure: 'Key figures: Takuan Sōhō (沢庵宗彭), Yagyū Munenori (柳生宗矩)'
+        },
+        'noh-art': {
+          kanji: '猿楽',
+          title: 'Sarugaku (Popular Theater)',
+          text: 'Originated as sangaku—acrobatic entertainment from China. Evolved into sarugaku, a popular farce with comic skits and simple dances. Mass entertainment, not art.',
+          figure: ''
+        },
+        'noh-do': {
+          kanji: '能道',
+          title: 'The Way of Noh',
+          text: 'Zeami Motokiyo transformed sarugaku into profound art. He studied Zen and infused Noh with concepts like "yūgen" (mysterious depth) and "hana" (flower). His treatises on Noh read like Zen texts.',
+          figure: 'Key figure: Zeami Motokiyo (世阿弥), c.1363-c.1443'
+        },
+        'dobo': {
+          kanji: '同朋衆',
+          title: 'Dōbōshū — The Muromachi Salon',
+          text: 'At Shogun Ashikaga Yoshimasa\'s Higashiyama Villa, a remarkable group gathered: artist-advisors serving the shogunate. Zeami (Noh), Shinke (poetry), Jukō (tea), Nōami (painting, flowers, renga)—masters of different arts working side by side. Like Paris Impressionists at Café Guerbois or Vienna intellectuals at Café Central. This cross-pollination was the crucible where arts transformed into paths.',
+          figure: 'Key figures: Zeami / Shinke / Jukō / Nōami (能阿弥)'
+        }
+      },
+      ja: {
+        'zen': {
+          kanji: '禅',
+          title: '禅仏教',
+          text: '1191年、僧・栄西が宋から持ち帰った。禅は「修行」の概念を持っていた——座禅を組み、公案に取り組み、日常のすべてを修行とする。300年間、禅は寺院で広まり、芸は娯楽のままだった。融合は15世紀に起きた。',
+          figure: '主要人物：栄西（1141-1215）'
+        },
+        'tea-art': {
+          kanji: '喫茶',
+          title: '喫茶・闘茶',
+          text: '茶は禅とともに伝来したが、何世紀も別々だった。平安時代は薬。鎌倉になると娯楽になった——産地を当てて賭ける闘茶。純粋な遊び、精神性はなかった。',
+          figure: ''
+        },
+        'tea-do': {
+          kanji: '茶道',
+          title: '茶道',
+          text: '村田珠光は異端の禅僧・一休のもとで参禅し、「茶禅一味」を得た。「仏法も茶の湯の中にある」。茶を点てることが座禅と等価になった。千利休が大成。',
+          figure: '主要人物：村田珠光 → 武野紹鷗 → 千利休'
+        },
+        'poetry-art': {
+          kanji: '和歌',
+          title: '和歌・連歌',
+          text: '和歌は平安以来の洗練された宮廷文学。連歌は鎌倉に社交的な遊びとして登場——歌人が交互に句を継ぐ。技術的に洗練されていたが、基本は娯楽だった。',
+          figure: ''
+        },
+        'poetry-do': {
+          kanji: '歌道',
+          title: '歌道',
+          text: '僧侶であり歌人の心敬は「冷え枯れる」という美学を展開——荒涼の中に美を見出す。この禅の影響を受けた感性が、詩を技芸から精神の道へ変えた。心敬の哲学は珠光の茶に直接影響を与えた。',
+          figure: '主要人物：心敬（1406-1475）'
+        },
+        'martial-art': {
+          kanji: '武術',
+          title: '武術・剣術',
+          text: '武士のための戦闘技術——殺すための実践的な技。剣術、弓術、馬術は戦場の必要から発達した。目的は勝利であり、変容ではなかった。',
+          figure: ''
+        },
+        'martial-do': {
+          kanji: '武道',
+          title: '武道',
+          text: '禅僧・沢庵は剣豪・柳生宗矩のために『不動智神妙録』を著し、「剣禅一致」を説いた。剣は敵ではなく、己の我執を断つ道具となる。「活人剣」——人を活かす剣。',
+          figure: '主要人物：沢庵宗彭、柳生宗矩'
+        },
+        'noh-art': {
+          kanji: '猿楽',
+          title: '散楽・猿楽',
+          text: '散楽として中国から伝わった曲芸的な見世物が起源。猿楽に発展し、滑稽な寸劇と素朴な舞を見せた。大衆娯楽であり、芸術ではなかった。',
+          figure: ''
+        },
+        'noh-do': {
+          kanji: '能道',
+          title: '能道',
+          text: '世阿弥は猿楽を深遠な芸術に変えた。禅を学び、「幽玄」や「花」といった概念を能に注入した。彼の能楽論は禅の文献のように読める。',
+          figure: '主要人物：世阿弥（1363頃-1443頃）'
+        },
+        'dobo': {
+          kanji: '同朋衆',
+          title: '同朋衆 — 室町のサロン',
+          text: '将軍・足利義政の東山殿に、特異な集団が集った——将軍家に仕える芸術顧問たち。世阿弥（能）、心敬（連歌）、珠光（茶）、能阿弥（絵画・立花・連歌）——異なる芸の達人が同じ場で活動した。パリのカフェ・ゲルボワに集った印象派、ウィーンのカフェ・ツェントラルの知識人のように。この相互交流が、芸を道へ変容させるるつぼとなった。',
+          figure: '主要人物：世阿弥 / 心敬 / 珠光 / 能阿弥'
+        }
+      }
+    };
+    
+    let currentLang = 'en';
+    
+    // Language toggle
+    document.getElementById('btn-en').addEventListener('click', () => {
+      currentLang = 'en';
+      document.body.classList.remove('ja');
+      document.getElementById('btn-en').classList.add('active');
+      document.getElementById('btn-ja').classList.remove('active');
+      closeInfo();
+    });
+    
+    document.getElementById('btn-ja').addEventListener('click', () => {
+      currentLang = 'ja';
+      document.body.classList.add('ja');
+      document.getElementById('btn-ja').classList.add('active');
+      document.getElementById('btn-en').classList.remove('active');
+      closeInfo();
+    });
+    
+    // Info panel
+    function showInfo(key) {
+      const data = infoData[currentLang][key];
+      if (!data) return;
+      
+      document.getElementById('info-kanji').textContent = data.kanji;
+      document.getElementById('info-title').textContent = data.title;
+      document.getElementById('info-text').textContent = data.text;
+      document.getElementById('info-figure').textContent = data.figure;
+      document.getElementById('info-panel').classList.add('active');
+    }
+    
+    function closeInfo() {
+      document.getElementById('info-panel').classList.remove('active');
+    }
+    
+    // Add click listeners
+    document.querySelectorAll('[data-info]').forEach(el => {
+      el.addEventListener('click', () => {
+        showInfo(el.dataset.info);
+      });
+    });
+  </script>
+</body>
+</html>
