@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>行持道環 Gyōji-dōkan | floclo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #f7f5f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      color: #4a4642;
+    }
+
+    /* Title section */
+    .title-section {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .title-kanji {
+      display: flex;
+      justify-content: center;
+      gap: 0.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .kanji-pair {
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+
+    .kanji-pair:hover,
+    .kanji-pair.active {
+      background-color: rgba(201, 120, 108, 0.15);
+      border-color: rgba(201, 120, 108, 0.4);
+    }
+
+    .kanji-char {
+      font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'Meiryo', sans-serif;
+      font-size: 1.75rem;
+      color: #4a4642;
+      transition: color 0.2s ease;
+    }
+
+    .kanji-pair:hover .kanji-char,
+    .kanji-pair.active .kanji-char {
+      color: #c9786c;
+    }
+
+    .title-sub {
+      font-size: 0.9rem;
+      color: #8a8272;
+      font-style: italic;
+    }
+
+    /* SVG Container */
+    .diagram-container {
+      position: relative;
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .diagram-container svg {
+      width: 100%;
+      height: auto;
+    }
+
+    /* Interactive elements */
+    .interactive {
+      cursor: pointer;
+    }
+
+    /* Tooltip - below the diagram */
+    .tooltip {
+      min-height: 7rem;
+      margin-top: 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      max-width: 420px;
+    }
+
+    .tooltip-content {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .tooltip-content.visible {
+      opacity: 1;
+    }
+
+    .tooltip-title {
+      font-size: 1.1rem;
+      color: #5a5248;
+      margin-bottom: 0.3rem;
+    }
+
+    .tooltip-title-ja {
+      font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'Meiryo', sans-serif;
+    }
+
+    .tooltip-reading {
+      font-size: 0.85rem;
+      color: #8a8272;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+
+    .tooltip-meaning {
+      font-size: 0.8rem;
+      color: #6a6258;
+      line-height: 1.6;
+      margin-bottom: 0.4rem;
+    }
+
+    .tooltip-chars {
+      font-size: 0.75rem;
+      color: #9a9288;
+      line-height: 1.5;
+    }
+
+    /* Source section */
+    .source-section {
+      max-width: 450px;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #d0c8c0;
+      text-align: center;
+    }
+
+    .source-quote {
+      font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'Meiryo', sans-serif;
+      font-size: 0.85rem;
+      color: #6a6258;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .source-translation {
+      font-size: 0.8rem;
+      color: #8a8272;
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .source-citation {
+      font-size: 0.75rem;
+      color: #a09888;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      text-align: center;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 14px;
+    }
+
+    footer a {
+      color: #666;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Title -->
+  <div class="title-section">
+    <div class="title-kanji">
+      <span class="kanji-pair" data-term="gyoji">
+        <span class="kanji-char">行</span><span class="kanji-char">持</span>
+      </span>
+      <span class="kanji-pair" data-term="dokan">
+        <span class="kanji-char">道</span><span class="kanji-char">環</span>
+      </span>
+    </div>
+    <p class="title-sub">Gyōji-dōkan</p>
+  </div>
+
+  <!-- Diagram -->
+  <div class="diagram-container">
+    <svg viewBox="0 0 450 460">
+      <defs>
+        <!-- Large outer sphere gradient with shadow effect -->
+        <radialGradient id="outerSphereGradient" cx="30%" cy="25%" r="75%">
+          <stop offset="0%" style="stop-color:#e0dcd0"/>
+          <stop offset="30%" style="stop-color:#c8c4b8"/>
+          <stop offset="70%" style="stop-color:#a8a498"/>
+          <stop offset="100%" style="stop-color:#888478"/>
+        </radialGradient>
+        
+        <!-- Small sphere gradients -->
+        <radialGradient id="sphereFrontGradient" cx="32%" cy="28%" r="65%">
+          <stop offset="0%" style="stop-color:#a89888"/>
+          <stop offset="100%" style="stop-color:#685848"/>
+        </radialGradient>
+        
+        <radialGradient id="sphereMidGradient" cx="32%" cy="28%" r="65%">
+          <stop offset="0%" style="stop-color:#908070"/>
+          <stop offset="100%" style="stop-color:#585048"/>
+        </radialGradient>
+        
+        <radialGradient id="sphereBackGradient" cx="32%" cy="28%" r="65%">
+          <stop offset="0%" style="stop-color:#787068"/>
+          <stop offset="100%" style="stop-color:#484038"/>
+        </radialGradient>
+        
+        <!-- Highlight gradients (coral red) -->
+        <radialGradient id="sphereHighlightFront" cx="32%" cy="28%" r="65%">
+          <stop offset="0%" style="stop-color:#d8a090"/>
+          <stop offset="100%" style="stop-color:#c9786c"/>
+        </radialGradient>
+        
+        <radialGradient id="sphereHighlightMid" cx="32%" cy="28%" r="65%">
+          <stop offset="0%" style="stop-color:#c89080"/>
+          <stop offset="100%" style="stop-color:#b86858"/>
+        </radialGradient>
+        
+        <radialGradient id="sphereHighlightBack" cx="32%" cy="28%" r="65%">
+          <stop offset="0%" style="stop-color:#b88070"/>
+          <stop offset="100%" style="stop-color:#a85848"/>
+        </radialGradient>
+        
+        <!-- Torus gradients -->
+        <linearGradient id="torusGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#a09080"/>
+          <stop offset="100%" style="stop-color:#686058"/>
+        </linearGradient>
+        
+        <linearGradient id="torusTopGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#b8a898"/>
+          <stop offset="100%" style="stop-color:#988878"/>
+        </linearGradient>
+        
+        <linearGradient id="torusBackGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#787068"/>
+          <stop offset="100%" style="stop-color:#585048"/>
+        </linearGradient>
+        
+        <!-- Torus highlight gradients (coral red) -->
+        <linearGradient id="torusHighlightGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#c89080"/>
+          <stop offset="100%" style="stop-color:#a86858"/>
+        </linearGradient>
+        
+        <linearGradient id="torusHighlightTop" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#d8a898"/>
+          <stop offset="100%" style="stop-color:#c9786c"/>
+        </linearGradient>
+        
+        <linearGradient id="torusHighlightBack" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#a87068"/>
+          <stop offset="100%" style="stop-color:#885848"/>
+        </linearGradient>
+      </defs>
+      
+      <!-- Large outer sphere: center y=230, r=200 -->
+      <circle cx="225" cy="230" r="200" 
+              fill="url(#outerSphereGradient)"
+              opacity="0.5"/>
+      
+      <!-- 発心: top edge at y=230 (sphere center) → center at 230+55=285 -->
+      <!-- Torus below that -->
+      <g class="interactive" data-term="gyoji-torus" id="torus-group">
+        <ellipse id="torus-back" cx="225" cy="310" rx="120" ry="45" fill="url(#torusBackGradient)"/>
+        <ellipse id="torus-body" cx="225" cy="332" rx="120" ry="45" fill="url(#torusGradient)"/>
+        <rect id="torus-side" x="105" y="310" width="240" height="22" fill="url(#torusGradient)"/>
+        <ellipse id="torus-top" cx="225" cy="310" rx="120" ry="45" fill="url(#torusTopGradient)"/>
+        <ellipse cx="225" cy="310" rx="50" ry="19" fill="#f7f5f0"/>
+        <text x="225" y="343" text-anchor="middle" 
+              font-family="'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif" 
+              font-size="14" fill="rgba(255,255,255,0.8)">行持</text>
+      </g>
+      
+      <!-- 菩提 (back) -->
+      <g class="interactive" data-term="bodai" id="bodai-group">
+        <circle id="bodai-sphere" cx="225" cy="148" r="48" fill="url(#sphereBackGradient)"/>
+        <text x="225" y="154" text-anchor="middle" 
+              font-family="'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif" 
+              font-size="13" fill="rgba(255,255,255,0.75)" 
+              pointer-events="none">菩提</text>
+      </g>
+      
+      <!-- 修行 (mid-left) -->
+      <g class="interactive" data-term="shugyo" id="shugyo-group">
+        <circle id="shugyo-sphere" cx="150" cy="203" r="50" fill="url(#sphereMidGradient)"/>
+        <text x="150" y="209" text-anchor="middle" 
+              font-family="'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif" 
+              font-size="14" fill="rgba(255,255,255,0.8)" 
+              pointer-events="none">修行</text>
+      </g>
+      
+      <!-- 涅槃 (mid-right) -->
+      <g class="interactive" data-term="nehan" id="nehan-group">
+        <circle id="nehan-sphere" cx="300" cy="203" r="50" fill="url(#sphereMidGradient)"/>
+        <text x="300" y="209" text-anchor="middle" 
+              font-family="'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif" 
+              font-size="14" fill="rgba(255,255,255,0.8)" 
+              pointer-events="none">涅槃</text>
+      </g>
+      
+      <!-- 発心 (front) - top at y=230 → center at 230+55=285 -->
+      <g class="interactive" data-term="hosshin" id="hosshin-group">
+        <circle id="hosshin-sphere" cx="225" cy="260" r="53" fill="url(#sphereFrontGradient)"/>
+        <text x="225" y="267" text-anchor="middle" 
+              font-family="'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif" 
+              font-size="15" fill="rgba(255,255,255,0.9)" 
+              pointer-events="none">発心</text>
+      </g>
+      
+    </svg>
+  </div>
+
+  <!-- Tooltip - below the diagram -->
+  <div class="tooltip">
+    <div class="tooltip-content" id="tooltip">
+      <p class="tooltip-title"><span class="tooltip-title-ja" id="tooltip-title-ja"></span> <span id="tooltip-title-en"></span></p>
+      <p class="tooltip-reading" id="tooltip-reading"></p>
+      <p class="tooltip-meaning" id="tooltip-meaning"></p>
+      <p class="tooltip-chars" id="tooltip-chars"></p>
+    </div>
+  </div>
+
+  <!-- Source -->
+  <div class="source-section">
+    <p class="source-quote">
+      「仏祖の大道、かならず無上の行持あり、<br>
+      道環して断絶せず。<br>
+      発心・修行・菩提・涅槃、<br>
+      しばらく間隙あらず、行持道環なり」
+    </p>
+    <p class="source-translation">
+      "The great Way of Buddha ancestors always has supreme continuous practice.<br>
+      It circles as the Way, never breaking off.<br>
+      Aspiration, practice, awakening, nirvana—<br>
+      not a moment's gap between them."
+    </p>
+    <p class="source-citation">
+      — Dōgen, <em>Shōbōgenzō</em>, Gyōji (c. 1242)
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <a href="https://medium.com/@floclostudio" target="_blank">Medium</a>
+      ·
+      <a href="https://buymeacoffee.com/floclostudio" target="_blank">Buy me a coffee</a>
+    </p>
+  </footer>
+
+  <script>
+    const termData = {
+      'gyoji': {
+        titleJa: '行持',
+        titleEn: '— Continuous Practice',
+        reading: 'gyōji',
+        meaning: 'Sustained daily practice. Not just meditation, but every act of daily life: waking, eating, cleaning, working. The foundation that carries everything.',
+        chars: '行 (gyō) = practice, action | 持 (ji) = sustain, maintain'
+      },
+      'dokan': {
+        titleJa: '道環',
+        titleEn: '— The Way Circles',
+        reading: 'dōkan',
+        meaning: 'The Way forms a ring with no endpoint. There is no "completion" or "arrival"—practice continues endlessly, circling back.',
+        chars: '道 (dō) = the Way, path | 環 (kan) = ring, circle'
+      },
+      'gyoji-torus': {
+        titleJa: '行持',
+        titleEn: '— The Foundation',
+        reading: 'gyōji',
+        meaning: 'Daily practice as the base that supports everything. The four aspects (aspiration, practice, awakening, nirvana) rest upon this continuous ring of daily effort.',
+        chars: '行 (gyō) = practice | 持 (ji) = sustain · The ring that never breaks.'
+      },
+      'hosshin': {
+        titleJa: '発心',
+        titleEn: '— Aspiration',
+        reading: 'hosshin',
+        meaning: 'The arising of the mind that seeks the Way. The initial resolve to pursue awakening. Not a one-time event, but renewed in every moment of practice.',
+        chars: '発 (hotsu) = arise, emit | 心 (shin) = heart, mind'
+      },
+      'shugyo': {
+        titleJa: '修行',
+        titleEn: '— Practice',
+        reading: 'shugyō',
+        meaning: 'Training, discipline, cultivation. For Dōgen, practice itself IS enlightenment (修証一等). There is no enlightenment apart from practice.',
+        chars: '修 (shū) = cultivate, train | 行 (gyō) = practice, conduct'
+      },
+      'bodai': {
+        titleJa: '菩提',
+        titleEn: '— Awakening',
+        reading: 'bodai',
+        meaning: 'Enlightenment, awakening to truth. From Sanskrit "bodhi." Not a distant goal but present in every moment of sincere practice.',
+        chars: '菩提 = phonetic rendering of Sanskrit "bodhi" (awakening)'
+      },
+      'nehan': {
+        titleJa: '涅槃',
+        titleEn: '— Nirvana',
+        reading: 'nehan',
+        meaning: 'Liberation, peace beyond suffering. The extinguishing of delusion. From Sanskrit "nirvāṇa." Not an escape from life but freedom within it.',
+        chars: '涅槃 = phonetic rendering of Sanskrit "nirvāṇa" (extinction, liberation)'
+      }
+    };
+
+    const sphereFills = {
+      'bodai': { normal: 'url(#sphereBackGradient)', highlight: 'url(#sphereHighlightBack)' },
+      'shugyo': { normal: 'url(#sphereMidGradient)', highlight: 'url(#sphereHighlightMid)' },
+      'nehan': { normal: 'url(#sphereMidGradient)', highlight: 'url(#sphereHighlightMid)' },
+      'hosshin': { normal: 'url(#sphereFrontGradient)', highlight: 'url(#sphereHighlightFront)' }
+    };
+
+    const tooltip = document.getElementById('tooltip');
+    const tooltipTitleJa = document.getElementById('tooltip-title-ja');
+    const tooltipTitleEn = document.getElementById('tooltip-title-en');
+    const tooltipReading = document.getElementById('tooltip-reading');
+    const tooltipMeaning = document.getElementById('tooltip-meaning');
+    const tooltipChars = document.getElementById('tooltip-chars');
+
+    let activeElement = null;
+    let activeTerm = null;
+
+    function showTooltip(term, element) {
+      const data = termData[term];
+      if (!data) return;
+      
+      if (activeElement) {
+        activeElement.classList.remove('active');
+        resetHighlight(activeTerm);
+      }
+      activeElement = element;
+      activeTerm = term;
+      element.classList.add('active');
+      applyHighlight(term);
+      
+      tooltipTitleJa.textContent = data.titleJa;
+      tooltipTitleEn.textContent = data.titleEn;
+      tooltipReading.textContent = data.reading;
+      tooltipMeaning.textContent = data.meaning;
+      tooltipChars.textContent = data.chars;
+      tooltip.classList.add('visible');
+    }
+
+    function hideTooltip() {
+      tooltip.classList.remove('visible');
+      if (activeElement) {
+        activeElement.classList.remove('active');
+        resetHighlight(activeTerm);
+        activeElement = null;
+        activeTerm = null;
+      }
+    }
+
+    function applyHighlight(term) {
+      if (sphereFills[term]) {
+        const sphere = document.getElementById(term + '-sphere');
+        if (sphere) sphere.setAttribute('fill', sphereFills[term].highlight);
+      }
+      if (term === 'gyoji-torus') {
+        document.getElementById('torus-back').setAttribute('fill', 'url(#torusHighlightBack)');
+        document.getElementById('torus-body').setAttribute('fill', 'url(#torusHighlightGradient)');
+        document.getElementById('torus-side').setAttribute('fill', 'url(#torusHighlightGradient)');
+        document.getElementById('torus-top').setAttribute('fill', 'url(#torusHighlightTop)');
+      }
+    }
+
+    function resetHighlight(term) {
+      if (sphereFills[term]) {
+        const sphere = document.getElementById(term + '-sphere');
+        if (sphere) sphere.setAttribute('fill', sphereFills[term].normal);
+      }
+      if (term === 'gyoji-torus') {
+        document.getElementById('torus-back').setAttribute('fill', 'url(#torusBackGradient)');
+        document.getElementById('torus-body').setAttribute('fill', 'url(#torusGradient)');
+        document.getElementById('torus-side').setAttribute('fill', 'url(#torusGradient)');
+        document.getElementById('torus-top').setAttribute('fill', 'url(#torusTopGradient)');
+      }
+    }
+
+    document.querySelectorAll('.kanji-pair').forEach(el => {
+      el.addEventListener('mouseenter', () => showTooltip(el.dataset.term, el));
+      el.addEventListener('mouseleave', hideTooltip);
+    });
+
+    document.querySelectorAll('.interactive').forEach(el => {
+      el.addEventListener('mouseenter', () => showTooltip(el.dataset.term, el));
+      el.addEventListener('mouseleave', hideTooltip);
+    });
+  </script>
+
+</body>
+</html>

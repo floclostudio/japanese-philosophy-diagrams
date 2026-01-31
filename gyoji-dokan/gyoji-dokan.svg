@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 720">
+  <defs>
+    <!-- Large outer sphere gradient with shadow effect -->
+    <radialGradient id="outerSphereGradient" cx="30%" cy="25%" r="75%">
+      <stop offset="0%" style="stop-color:#e0dcd0"/>
+      <stop offset="30%" style="stop-color:#c8c4b8"/>
+      <stop offset="70%" style="stop-color:#a8a498"/>
+      <stop offset="100%" style="stop-color:#888478"/>
+    </radialGradient>
+    
+    <!-- Small sphere gradients -->
+    <radialGradient id="sphereFrontGradient" cx="32%" cy="28%" r="65%">
+      <stop offset="0%" style="stop-color:#a89888"/>
+      <stop offset="100%" style="stop-color:#685848"/>
+    </radialGradient>
+    
+    <radialGradient id="sphereMidGradient" cx="32%" cy="28%" r="65%">
+      <stop offset="0%" style="stop-color:#908070"/>
+      <stop offset="100%" style="stop-color:#585048"/>
+    </radialGradient>
+    
+    <radialGradient id="sphereBackGradient" cx="32%" cy="28%" r="65%">
+      <stop offset="0%" style="stop-color:#787068"/>
+      <stop offset="100%" style="stop-color:#484038"/>
+    </radialGradient>
+    
+    <!-- Torus gradients -->
+    <linearGradient id="torusGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#a09080"/>
+      <stop offset="100%" style="stop-color:#686058"/>
+    </linearGradient>
+    
+    <linearGradient id="torusTopGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#b8a898"/>
+      <stop offset="100%" style="stop-color:#988878"/>
+    </linearGradient>
+    
+    <linearGradient id="torusBackGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#787068"/>
+      <stop offset="100%" style="stop-color:#585048"/>
+    </linearGradient>
+  </defs>
+  
+  <style>
+    .title-ja { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; font-size: 28px; fill: #4a4642; }
+    .title-sub { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; fill: #8a8272; font-style: italic; }
+    .kanji { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; fill: rgba(255,255,255,0.9); }
+    .kanji-ring { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; fill: rgba(255,255,255,0.8); }
+    .source { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; font-size: 11px; fill: #7a7268; }
+    .source-en { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 10px; fill: #8a8278; font-style: italic; }
+  </style>
+  
+  <!-- Background -->
+  <rect width="600" height="720" fill="#f7f5f0"/>
+  
+  <!-- Title -->
+  <text x="300" y="50" text-anchor="middle" class="title-ja">行持道環</text>
+  <text x="300" y="75" text-anchor="middle" class="title-sub">Gyōji-dōkan</text>
+  
+  <!-- Large outer sphere: center y=270, r=200 -->
+  <!-- 発心 top edge at y=270 → 発心 center at 270+55=325 -->
+  <circle cx="300" cy="270" r="200" 
+          fill="url(#outerSphereGradient)"
+          opacity="0.5"/>
+  
+  <!-- Torus (行持) -->
+  <ellipse cx="300" cy="365" rx="125" ry="48" fill="url(#torusBackGradient)"/>
+  <ellipse cx="300" cy="388" rx="125" ry="48" fill="url(#torusGradient)"/>
+  <rect x="175" y="365" width="250" height="23" fill="url(#torusGradient)"/>
+  <ellipse cx="300" cy="365" rx="125" ry="48" fill="url(#torusTopGradient)"/>
+  <ellipse cx="300" cy="365" rx="52" ry="20" fill="#f7f5f0"/>
+  <text x="300" y="398" text-anchor="middle" class="kanji-ring" style="font-size: 15px;">行持</text>
+  
+  <!-- 菩提 (back) -->
+  <circle cx="300" cy="190" r="52" fill="url(#sphereBackGradient)"/>
+  <text x="300" y="197" text-anchor="middle" class="kanji" style="font-size: 14px; fill: rgba(255,255,255,0.75);">菩提</text>
+  
+  <!-- 修行 (mid-left) -->
+  <circle cx="200" cy="250" r="55" fill="url(#sphereMidGradient)"/>
+  <text x="200" y="258" text-anchor="middle" class="kanji" style="font-size: 15px; fill: rgba(255,255,255,0.8);">修行</text>
+  
+  <!-- 涅槃 (mid-right) -->
+  <circle cx="400" cy="250" r="55" fill="url(#sphereMidGradient)"/>
+  <text x="400" y="258" text-anchor="middle" class="kanji" style="font-size: 15px; fill: rgba(255,255,255,0.8);">涅槃</text>
+  
+  <!-- 発心 (front) - top at y=270 → center at 325 -->
+  <circle cx="300" cy="310" r="58" fill="url(#sphereFrontGradient)"/>
+  <text x="300" y="318" text-anchor="middle" class="kanji" style="font-size: 16px;">発心</text>
+  
+  <!-- Source section -->
+  <line x1="120" y1="505" x2="480" y2="505" stroke="#d0c8c0" stroke-width="0.5"/>
+  
+  <text x="300" y="545" text-anchor="middle" class="source">
+    「仏祖の大道、かならず無上の行持あり、道環して断絶せず。
+  </text>
+  <text x="300" y="565" text-anchor="middle" class="source">
+    発心・修行・菩提・涅槃、しばらく間隙あらず、行持道環なり」
+  </text>
+  
+  <text x="300" y="605" text-anchor="middle" class="source-en">
+    "Aspiration, practice, awakening, nirvana—not a moment's gap between them."
+  </text>
+  
+  <text x="300" y="640" text-anchor="middle" class="source-en" style="font-style: normal; fill: #a09888;">
+    — Dōgen, Shōbōgenzō, Gyōji (c. 1242)
+  </text>
+  
+</svg>
