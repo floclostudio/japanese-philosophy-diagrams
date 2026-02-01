@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experience Sanda Celadon | 三田青磁を体験する</title>
+  <meta name="description" content="Workshops, museums, and Expo 2025 programs—plan your visit to Sanda">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+const { useState } = React;
+
+const SandaCeladonLinks = () => {
+  const [lang, setLang] = useState('en');
+
+  const resources = [
+    {
+      id: 'studio',
+      category: { en: 'Experience', ja: '体験' },
+      title: { en: 'Sanda Ceramics Forest', ja: '三田陶芸の森。' },
+      description: {
+        en: 'The heart of contemporary Sanda celadon. Master ceramicist Itō Zuihō teaches mold-pressing, hand-forming, and wheel-throwing.',
+        ja: '現代三田青磁の拠点。伊藤瑞宝氏による型押し・手びねり・ろくろ体験。'
+      },
+      meta: { en: 'JR Aino Stn. 15 min · Reservation required', ja: 'JR相野駅 徒歩15分 · 要予約' },
+      url: { en: 'https://www.sandatouji.art/en', ja: 'https://www.sandatouji.art/' },
+      accent: 'linear-gradient(135deg, #7a9e7a 0%, #5a7a6a 100%)'
+    },
+    {
+      id: 'expo',
+      category: { en: 'Expo 2025', ja: '万博2025' },
+      title: { en: 'Hyogo Field Pavilion', ja: 'ひょうごフィールドパビリオン' },
+      description: {
+        en: 'Official SDGs program. Learn celadon history and sustainability—porcelain lasts centuries.',
+        ja: '公式SDGsプログラム。三田青磁の歴史と、磁器の持続可能性を学ぶ。'
+      },
+      meta: { en: '2–3 hours · Groups up to 60 · Interpreter available', ja: '2〜3時間 · 最大60名 · 通訳対応可' },
+      url: { 
+        en: 'https://expo2025-hyogo-fieldpavilion.jp.e.atd.hp.transer.com/program/66', 
+        ja: 'https://expo2025-hyogo-fieldpavilion.jp/program/66' 
+      },
+      accent: 'linear-gradient(135deg, #6a8a9a 0%, #4a6a7a 100%)'
+    },
+    {
+      id: 'tourism',
+      category: { en: 'Guide (JA)', ja: 'ガイド' },
+      title: { en: 'Sanda Tourism Association', ja: '三田市観光協会' },
+      description: {
+        en: 'Comprehensive Japanese guide with artist interview and historical timeline.',
+        ja: '伊藤瑞宝氏インタビュー、歴史解説、施設案内を網羅。'
+      },
+      meta: { en: 'Japanese · In-depth feature', ja: '日本語 · 特集ページ' },
+      url: { en: 'https://sanda-kankou.jp/sanda-seiji/', ja: 'https://sanda-kankou.jp/sanda-seiji/' },
+      accent: 'linear-gradient(135deg, #8a8a7a 0%, #6a6a5a 100%)'
+    },
+    {
+      id: 'inbound',
+      category: { en: 'Guide (EN)', ja: '多言語' },
+      title: { en: 'Multilingual Visitor Guide', ja: '多言語観光ガイド' },
+      description: {
+        en: 'English introduction for international visitors—history, characteristics, access.',
+        ja: '英語・中国語対応。海外からの訪問者向け基本情報。'
+      },
+      meta: { en: 'English · Chinese available', ja: '英語・中国語' },
+      url: { 
+        en: 'https://inbound.sanda-kankou.jp/specialfeature-en/ssandaceladon-en/', 
+        ja: 'https://inbound.sanda-kankou.jp/specialfeature-en/ssandaceladon-en/' 
+      },
+      accent: 'linear-gradient(135deg, #7a8a8a 0%, #5a6a6a 100%)'
+    }
+  ];
+
+  return (
+    <div style={{
+      fontFamily: "'Noto Serif JP', 'Hiragino Mincho ProN', 'Times New Roman', serif",
+      maxWidth: '640px',
+      margin: '0 auto',
+      padding: '48px 24px',
+      color: '#2a2a2a',
+      background: '#fafaf8'
+    }}>
+      
+      {/* Header */}
+      <header style={{ marginBottom: '40px', textAlign: 'center' }}>
+        <p style={{
+          fontSize: '11px',
+          letterSpacing: '3px',
+          color: '#888',
+          marginBottom: '12px',
+          textTransform: 'uppercase'
+        }}>
+          {lang === 'en' ? 'For Those Who Want to Go Deeper' : '興味を持った方へ'}
+        </p>
+        
+        <h1 style={{
+          fontSize: '22px',
+          fontWeight: '400',
+          margin: '0 0 24px 0',
+          lineHeight: 1.4
+        }}>
+          {lang === 'en' ? 'Experience Sanda Celadon' : '三田青磁を体験する'}
+        </h1>
+
+        {/* Language Toggle */}
+        <div>
+          {['en', 'ja'].map((l, i) => (
+            <span key={l}>
+              <button
+                onClick={() => setLang(l)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  color: lang === l ? '#2a2a2a' : '#aaa',
+                  textDecoration: lang === l ? 'underline' : 'none',
+                  textUnderlineOffset: '3px',
+                  padding: '4px 8px'
+                }}
+              >
+                {l === 'en' ? 'EN' : 'JA'}
+              </button>
+              {i === 0 && <span style={{ color: '#ddd' }}>·</span>}
+            </span>
+          ))}
+        </div>
+      </header>
+
+      {/* Intro Text */}
+      <p style={{
+        fontSize: '14px',
+        lineHeight: 1.9,
+        color: '#555',
+        marginBottom: '40px',
+        textAlign: 'center'
+      }}>
+        {lang === 'en' 
+          ? 'Sanda celadon is an official Hyogo Field Pavilion program for Expo 2025—the prefecture transformed into a living exhibition.'
+          : '三田青磁は大阪・関西万博2025「ひょうごフィールドパビリオン」認定プログラムです。'}
+      </p>
+
+      {/* Cards */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {resources.map((item) => (
+          <a
+            key={item.id}
+            href={item.url[lang]}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'block',
+              textDecoration: 'none',
+              color: 'inherit',
+              background: '#fff',
+              border: '1px solid #e8e8e8',
+              borderRadius: '2px',
+              overflow: 'hidden',
+              transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#ccc';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#e8e8e8';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            {/* Color Bar */}
+            <div style={{
+              height: '4px',
+              background: item.accent
+            }} />
+            
+            <div style={{ padding: '20px 24px' }}>
+              {/* Category */}
+              <p style={{
+                fontSize: '10px',
+                letterSpacing: '1.5px',
+                color: '#999',
+                margin: '0 0 8px 0',
+                textTransform: 'uppercase'
+              }}>
+                {item.category[lang]}
+              </p>
+              
+              {/* Title */}
+              <h2 style={{
+                fontSize: '16px',
+                fontWeight: '500',
+                margin: '0 0 8px 0',
+                lineHeight: 1.4
+              }}>
+                {item.title[lang]}
+              </h2>
+              
+              {/* Description */}
+              <p style={{
+                fontSize: '13px',
+                color: '#666',
+                margin: '0 0 12px 0',
+                lineHeight: 1.7
+              }}>
+                {item.description[lang]}
+              </p>
+              
+              {/* Meta */}
+              <p style={{
+                fontSize: '11px',
+                color: '#999',
+                margin: 0
+              }}>
+                {item.meta[lang]}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      {/* Footer Quote */}
+      <footer style={{
+        marginTop: '48px',
+        paddingTop: '32px',
+        borderTop: '1px solid #e8e8e8',
+        textAlign: 'center'
+      }}>
+        <p style={{
+          fontSize: '13px',
+          color: '#888',
+          fontStyle: 'italic',
+          lineHeight: 1.8,
+          maxWidth: '480px',
+          margin: '0 auto'
+        }}>
+          {lang === 'en' 
+            ? '"What craft or tradition sits quietly in your own region, carrying centuries of intention, waiting to be discovered?"'
+            : '「あなたの地元にも、何世紀もの想いを宿し、発見を待つ工芸があるのでは」'}
+        </p>
+      </footer>
+    </div>
+  );
+};
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(<SandaCeladonLinks />);
+  </script>
+</body>
+</html>

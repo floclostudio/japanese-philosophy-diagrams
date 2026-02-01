@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Journey of Celadon | 青磁の旅路</title>
+  <meta name="description" content="From ancient China to a small town in Japan—3,000 years of ceramic history">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+const { useState } = React;
+
+const CeladonTimeline = () => {
+  const [activeNode, setActiveNode] = useState(null);
+  const [showKamesukeProfile, setShowKamesukeProfile] = useState(false);
+  const [showZuihoProfile, setShowZuihoProfile] = useState(false);
+  const [language, setLanguage] = useState('en');
+
+  const colors = {
+    china: '#0d4f4f',
+    chinaLight: '#1a6b6b',
+    japan: '#2d8f8f',
+    japanLight: '#4aa8a0',
+    sanda: '#6bc4b8',
+    sandaLight: '#8ed4ca',
+    decline: '#7a9e9e',
+    light: '#d5eeea',
+    bg: '#f7fafa'
+  };
+
+  const timelineData = [
+    { id: 'shang', year: 'c. 1400 BCE', era: { en: 'Shang Dynasty', ja: '殷時代' }, location: { en: 'China', ja: '中国' }, title: { en: 'Proto-celadon emerges', ja: '原始青磁の登場' }, description: { en: 'The earliest ash glazes appear, ancestors of what would become celadon.', ja: '最初の灰釉が登場。後に青磁となるものの祖先。' }, color: colors.china, branch: 'china' },
+    { id: 'han', year: '1st-2nd c. CE', era: { en: 'Han Dynasty', ja: '後漢時代' }, location: { en: 'Yue Kilns, Zhejiang', ja: '越州窯・浙江省' }, title: { en: 'True celadon is born', ja: '本格的な青磁の誕生' }, description: { en: 'The Yue kilns produce the first true celadon—that distinctive jade-like blue-green.', ja: '越州窯が最初の本格的な青磁を生み出す。' }, color: colors.china, branch: 'china' },
+    { id: 'song', year: '960-1279', era: { en: 'Song Dynasty', ja: '宋時代' }, location: { en: 'Longquan, China', ja: '龍泉窯・中国' }, title: { en: 'The golden age of Chinese celadon', ja: '中国青磁の黄金時代' }, description: { en: 'Longquan kilns achieve the pinnacle. The famed "kinuta" celadon becomes the standard.', ja: '龍泉窯が頂点に到達。「砧」青磁はあらゆる青磁の基準となる。' }, color: colors.chinaLight, branch: 'china', highlight: true },
+    { id: 'yuan-decline', year: '1279-1368', era: { en: 'Yuan Dynasty', ja: '元時代' }, location: { en: 'China', ja: '中国' }, title: { en: 'Decline under Mongol rule', ja: 'モンゴル支配下の衰退' }, description: { en: 'The Mongol conquest disrupts the ceramic industry. Quality declines.', ja: 'モンゴルの征服が陶磁器産業を混乱させる。品質は低下。' }, color: colors.decline, branch: 'china' },
+    { id: 'ming-qing', year: '1368-1912', era: { en: 'Ming-Qing', ja: '明清時代' }, location: { en: 'Jingdezhen, China', ja: '景徳鎮・中国' }, title: { en: 'Blue-and-white rises, celadon recedes', ja: '染付の興隆、青磁の後退' }, description: { en: 'Imperial favor shifts to blue-and-white porcelain. The golden age is over.', ja: '皇帝の関心は染付磁器へ。黄金時代は終わった。' }, color: colors.decline, branch: 'china' },
+    { id: 'heian', year: '11th c.', era: { en: 'Heian Period', ja: '平安時代' }, location: { en: 'Japan', ja: '日本' }, title: { en: 'Valued above gold in Japan', ja: '日本で金より貴く' }, description: { en: 'Chinese celadon arrives and captivates aristocracy.', ja: '中国青磁が伝わり貴族を魅了。' }, color: colors.japan, branch: 'japan' },
+    { id: 'hizen', year: 'Early 17th c.', era: { en: 'Edo Period', ja: '江戸時代初期' }, location: { en: 'Hizen (Saga)', ja: '肥前（佐賀）' }, title: { en: 'Japan begins domestic production', ja: '日本での生産開始' }, description: { en: 'Hizen (Saga) becomes the first to produce celadon domestically.', ja: '肥前が国内初の青磁を生産。' }, color: colors.japanLight, branch: 'japan' },
+    { id: 'sanda-start', year: '1789-1804', era: { en: 'Late Edo', ja: '江戸後期' }, location: { en: 'Sanda, Hyogo', ja: '三田・兵庫' }, title: { en: 'A potter\'s dream, a lord\'s refusal', ja: '陶工の夢、殿様の拒絶' }, description: { en: 'Potter Uchida discovers celadon stone. Merchant Kanda funds the venture.', ja: '内田忠兵衛が青磁原石を発見。豪商・神田惣兵衛が出資。' }, color: colors.sanda, branch: 'sanda', highlight: true },
+    { id: 'sanda-kamesuke', year: '1800-1810', era: { en: 'Late Edo', ja: '江戸後期' }, location: { en: 'Sanda, Hyogo', ja: '三田・兵庫' }, title: { en: 'The polymath Kamesuke arrives', ja: '多才な亀祐の登場' }, description: { en: 'Kanda visits Okuda Eisen (1800). Eisen sends Kamesuke—not the famous Mokubei—so Sanda could develop its own identity.', ja: '神田が奥田頴川を訪問（1800）。頴川は木米ではなく亀祐を送る——三田に独自性を持たせるため。' }, color: colors.sanda, branch: 'sanda', highlight: true, hasProfile: true },
+    { id: 'sanda-peak', year: '1804-1830', era: { en: 'Bunka-Bunsei', ja: '文化・文政期' }, location: { en: 'Sanda, Hyogo', ja: '三田・兵庫' }, title: { en: 'Golden age: "finest celadon in Japan"', ja: '黄金時代：「日本一の青磁」' }, description: { en: 'Four kilns, 300 potters. In 1830, Kamesuke publishes Tōki Shinan.', ja: '4つの窯、300人の職人。1830年、亀祐が『陶器指南』を出版。' }, color: colors.sandaLight, branch: 'sanda', highlight: true },
+    { id: 'sanda-decline', year: '1827-1944', era: { en: 'Late Edo - Shōwa', ja: '江戸末期〜昭和' }, location: { en: 'Sanda, Hyogo', ja: '三田・兵庫' }, title: { en: 'Decline and silence', ja: '衰退と沈黙' }, description: { en: 'Kamesuke returns to Kyoto. Last kiln closes in 1944.', ja: '亀祐が京都に帰る。1944年、最後の窯が閉じる。' }, color: colors.decline, branch: 'sanda' },
+    { id: 'sanda-revival', year: '1988-present', era: { en: 'Shōwa - Present', ja: '昭和〜現在' }, location: { en: 'Sanda, Hyogo', ja: '三田・兵庫' }, title: { en: 'Revival: The sole inheritor', ja: '復活：唯一の継承者' }, description: { en: 'Itō Zuihō moves to Sanda, studies excavated molds, revives the technique. Today the only Sanda celadon artist.', ja: '伊藤瑞宝が三田に移住、出土した型を研究し技術を復興。現在、唯一の三田青磁作家。' }, color: colors.sanda, branch: 'sanda', highlight: true, hasZuihoProfile: true }
+  ];
+
+  const kamesukeProfile = {
+    en: { title: 'Kinkōdō Kamesuke (1765-1837)', subtitle: 'The Polymath Potter', sections: [
+      { label: 'Origins', content: 'Born into a doll-making family in Fushimi, Kyoto.' },
+      { label: 'Training', content: 'Studied under Okuda Eisen. Fellow students: Aoki Mokubei, Nin\'ami Dōhachi, Eiraku Hozen—the "Three Great Masters."' },
+      { label: 'Why Kamesuke?', content: 'Eisen chose him over Mokubei for Sanda. Mokubei\'s celadon was too perfect—indistinguishable from Chinese. Eisen wanted Sanda to develop its own identity.' },
+      { label: 'Innovation', content: 'His kata-oshi (型押し) enabled consistent quality at scale.' },
+      { label: 'Publication', content: 'Tōki Shinan (1830)—Japan\'s first ceramics manual.' }
+    ]},
+    ja: { title: '欽古堂亀祐（1765-1837）', subtitle: '多才なる陶工', sections: [
+      { label: '出自', content: '京都・伏見の人形師の家に生まれる。' },
+      { label: '修行', content: '奥田頴川に師事。同門に青木木米、仁阿弥道八、永楽保全——「三羽ガラス」。' },
+      { label: 'なぜ亀祐？', content: '頴川は木米ではなく亀祐を三田に送った。木米の青磁は完璧すぎて中国産と区別がつかない。三田には独自性を持ってほしかったのだ。' },
+      { label: '技術革新', content: '「型押し」で品質を保ちながら量産を実現。' },
+      { label: '著作', content: '『陶器指南』（1830年）——日本初の焼き物技法書。' }
+    ]}
+  };
+
+  const zuihoProfile = {
+    en: { title: 'Itō Zuihō (1963-)', subtitle: 'The Sole Inheritor', sections: [
+      { label: 'Origins', content: 'Born in Aichi Prefecture. Studied ceramics at Kyoto City University of Arts under Suzuki Osamu.' },
+      { label: 'Journey', content: '1988: Moved to Sanda. 1994: Built own kiln (gō: "Zuihō").' },
+      { label: 'Research', content: 'Participated in city archaeological surveys. Learned techniques from excavated molds and fragments.' },
+      { label: 'Today', content: 'Director of "Sanda Ceramics Forest." The only artist making Sanda celadon.' },
+      { label: 'Mission', content: '"Before I die, I want to train successors and protect Sanda celadon."' }
+    ]},
+    ja: { title: '伊藤瑞宝（1963-）', subtitle: '唯一の継承者', sections: [
+      { label: '出自', content: '愛知県生まれ。京都市立芸術大学で鈴木治に師事。' },
+      { label: '歩み', content: '1988年：三田に移住。1994年：築窯（陶号「瑞宝」）。' },
+      { label: '研究', content: '市の発掘調査に参加。出土した型や陶片から技術を学ぶ。' },
+      { label: '現在', content: '「三田陶芸の森。」館長。三田青磁を作る唯一の作家。' },
+      { label: '使命', content: '「自分が生きているうちに後継者を育て、三田青磁を守りたい」' }
+    ]}
+  };
+
+  const t = language === 'en' ? {
+    title: 'The Journey of Celadon', subtitle: 'From ancient China to a small town in Japan',
+    toggle: '日本語', clickHint: 'Click any point to explore',
+    viewProfile: 'View Profile →', closeProfile: '← Back to Timeline',
+    legend: { china: 'China', japan: 'Japan', sanda: 'Sanda' },
+    map: { china: 'CHINA', japan: 'JAPAN', hizen: 'Hizen', sanda: 'Sanda', longquan: 'Longquan', korea: 'KOREA' }
+  } : {
+    title: '青磁の旅路', subtitle: '古代中国から日本の小さな町へ',
+    toggle: 'English', clickHint: '各ポイントをクリックして詳細を見る',
+    viewProfile: 'プロフィール →', closeProfile: '← タイムラインに戻る',
+    legend: { china: '中国', japan: '日本', sanda: '三田' },
+    map: { china: '中国', japan: '日本', hizen: '肥前', sanda: '三田', longquan: '龍泉', korea: '朝鮮' }
+  };
+
+  if (showKamesukeProfile) {
+    const profile = kamesukeProfile[language];
+    return (
+      <div style={{ fontFamily: '"Cormorant Garamond", "Noto Serif JP", Georgia, serif', backgroundColor: colors.bg, minHeight: '100vh', padding: '40px 20px', color: '#2d3436' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <button onClick={() => setShowKamesukeProfile(false)} style={{ background: 'none', border: 'none', color: colors.china, cursor: 'pointer', fontSize: '14px', marginBottom: '25px', padding: 0 }}>{t.closeProfile}</button>
+          <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <div style={{ width: '70px', height: '70px', borderRadius: '50%', backgroundColor: colors.china, margin: '0 auto 15px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', color: '#fff' }}>欽</div>
+            <h1 style={{ fontSize: '26px', fontWeight: '400', color: colors.china, marginBottom: '5px' }}>{profile.title}</h1>
+            <p style={{ fontSize: '15px', color: colors.japan, fontStyle: 'italic' }}>{profile.subtitle}</p>
+          </div>
+          {profile.sections.map((s, i) => (
+            <div key={i} style={{ marginBottom: '18px', paddingLeft: '15px', borderLeft: `2px solid ${colors.light}` }}>
+              <h3 style={{ fontSize: '11px', fontWeight: '600', color: colors.china, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>{s.label}</h3>
+              <p style={{ fontSize: '14px', color: '#4a5568', lineHeight: '1.7' }}>{s.content}</p>
+            </div>
+          ))}
+        </div>
+        <footer style={{ marginTop: '60px', padding: '20px', textAlign: 'center', borderTop: '1px solid #eee', color: '#666', fontSize: '14px' }}>
+          <p><a href="https://medium.com/@floclostudio" target="_blank" rel="noopener noreferrer" style={{ color: '#666', margin: '0 10px', textDecoration: 'none' }}>Medium</a>·<a href="https://buymeacoffee.com/floclostudio" target="_blank" rel="noopener noreferrer" style={{ color: '#666', margin: '0 10px', textDecoration: 'none' }}>Buy me a coffee</a></p>
+        </footer>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap');`}</style>
+      </div>
+    );
+  }
+
+  if (showZuihoProfile) {
+    const profile = zuihoProfile[language];
+    return (
+      <div style={{ fontFamily: '"Cormorant Garamond", "Noto Serif JP", Georgia, serif', backgroundColor: colors.bg, minHeight: '100vh', padding: '40px 20px', color: '#2d3436' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <button onClick={() => setShowZuihoProfile(false)} style={{ background: 'none', border: 'none', color: colors.sanda, cursor: 'pointer', fontSize: '14px', marginBottom: '25px', padding: 0 }}>{t.closeProfile}</button>
+          <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <div style={{ width: '70px', height: '70px', borderRadius: '50%', backgroundColor: colors.sanda, margin: '0 auto 15px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', color: '#fff' }}>瑞</div>
+            <h1 style={{ fontSize: '26px', fontWeight: '400', color: colors.sanda, marginBottom: '5px' }}>{profile.title}</h1>
+            <p style={{ fontSize: '15px', color: colors.japan, fontStyle: 'italic' }}>{profile.subtitle}</p>
+          </div>
+          {profile.sections.map((s, i) => (
+            <div key={i} style={{ marginBottom: '18px', paddingLeft: '15px', borderLeft: `2px solid ${colors.light}` }}>
+              <h3 style={{ fontSize: '11px', fontWeight: '600', color: colors.sanda, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>{s.label}</h3>
+              <p style={{ fontSize: '14px', color: '#4a5568', lineHeight: '1.7' }}>{s.content}</p>
+            </div>
+          ))}
+        </div>
+        <footer style={{ marginTop: '60px', padding: '20px', textAlign: 'center', borderTop: '1px solid #eee', color: '#666', fontSize: '14px' }}>
+          <p><a href="https://medium.com/@floclostudio" target="_blank" rel="noopener noreferrer" style={{ color: '#666', margin: '0 10px', textDecoration: 'none' }}>Medium</a>·<a href="https://buymeacoffee.com/floclostudio" target="_blank" rel="noopener noreferrer" style={{ color: '#666', margin: '0 10px', textDecoration: 'none' }}>Buy me a coffee</a></p>
+        </footer>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap');`}</style>
+      </div>
+    );
+  }
+
+  const chinaItems = timelineData.filter(d => d.branch === 'china');
+  const japanItems = timelineData.filter(d => d.branch === 'japan');
+  const sandaItems = timelineData.filter(d => d.branch === 'sanda');
+
+  /*
+   * Coordinate system based on actual geography:
+   * SVG: 560 x 280, Lat: 22°N-48°N, Lng: 100°E-148°E
+   * x = (lng - 100) * 11.67
+   * y = (48 - lat) * 10.77
+   * 
+   * Key locations:
+   * - Longquan (28.1°N, 119.5°E): x=228, y=214
+   * - Arita/Hizen (33.2°N, 129.9°E): x=349, y=159
+   * - Sanda (34.9°N, 135.2°E): x=411, y=141
+   * - Osaka (34.7°N, 135.5°E): x=414, y=143
+   * - Tokyo (35.7°N, 139.7°E): x=463, y=132
+   * - Seoul (37.6°N, 127.0°E): x=315, y=112
+   * - Busan (35.2°N, 129.0°E): x=338, y=138
+   */
+
+  const geo = {
+    longquan: { x: 228, y: 214 },  // 28.1°N, 119.5°E
+    hizen: { x: 349, y: 159 },      // 33.2°N, 129.9°E  
+    sanda: { x: 411, y: 141 },      // 34.9°N, 135.2°E
+  };
+
+  return (
+    <div style={{ fontFamily: '"Cormorant Garamond", "Noto Serif JP", Georgia, serif', backgroundColor: colors.bg, minHeight: '100vh', padding: '30px 20px', color: '#2d3436' }}>
+      {/* Header */}
+      <div style={{ maxWidth: '850px', margin: '0 auto 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <h1 style={{ fontSize: '36px', fontWeight: '300', color: colors.china, marginBottom: '6px' }}>{t.title}</h1>
+          <p style={{ fontSize: '16px', color: '#6b7280', fontStyle: 'italic' }}>{t.subtitle}</p>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <button onClick={() => setLanguage(language === 'en' ? 'ja' : 'en')} style={{ background: 'none', border: `1px solid ${colors.china}`, color: colors.china, padding: '6px 14px', cursor: 'pointer', fontSize: '13px', borderRadius: '3px', marginBottom: '12px' }}>{t.toggle}</button>
+          <div style={{ display: 'flex', gap: '15px', fontSize: '11px', color: '#6b7280', justifyContent: 'flex-end' }}>
+            {[['china', t.legend.china], ['japan', t.legend.japan], ['sanda', t.legend.sanda]].map(([key, label]) => (
+              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: colors[key] }} />
+                <span>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Geographic Map - Line-based Infographic */}
+      <div style={{ maxWidth: '850px', margin: '0 auto 40px', padding: '25px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+        <svg viewBox="0 0 560 280" style={{ width: '100%', height: 'auto' }}>
+          
+          {/* China - rectangular blocks */}
+          <g stroke={colors.china} strokeWidth="2" fill="none" opacity="0.25">
+            {/* Northern border region */}
+            <line x1="20" y1="55" x2="220" y2="55" />
+            <line x1="220" y1="55" x2="280" y2="85" />
+            {/* Eastern coast */}
+            <line x1="280" y1="85" x2="290" y2="130" />
+            <line x1="290" y1="130" x2="270" y2="180" />
+            <line x1="270" y1="180" x2="240" y2="230" />
+            {/* Southern coast */}
+            <line x1="240" y1="230" x2="180" y2="250" />
+            <line x1="180" y1="250" x2="100" y2="245" />
+            {/* Western border */}
+            <line x1="100" y1="245" x2="30" y2="200" />
+            <line x1="30" y1="200" x2="20" y2="120" />
+            <line x1="20" y1="120" x2="20" y2="55" />
+          </g>
+          
+          {/* Korea Peninsula - vertical lines */}
+          <g stroke="#888" strokeWidth="2" fill="none" opacity="0.2">
+            {/* 125-130°E, 34-43°N → x:292-350, y:54-151 */}
+            <line x1="305" y1="54" x2="315" y2="54" />
+            <line x1="315" y1="54" x2="340" y2="100" />
+            <line x1="340" y1="100" x2="345" y2="151" />
+            <line x1="345" y1="151" x2="325" y2="155" />
+            <line x1="325" y1="155" x2="305" y2="120" />
+            <line x1="305" y1="120" x2="305" y2="54" />
+          </g>
+          
+          {/* Japan - line-based shapes */}
+          <g stroke={colors.japan} strokeWidth="2" fill="none" opacity="0.25">
+            {/* Hokkaido: 41-45°N, 140-145°E → x:467-525, y:32-75 */}
+            <line x1="467" y1="50" x2="510" y2="35" />
+            <line x1="510" y1="35" x2="530" y2="55" />
+            <line x1="530" y1="55" x2="510" y2="78" />
+            <line x1="510" y1="78" x2="467" y2="70" />
+            <line x1="467" y1="70" x2="467" y2="50" />
+            
+            {/* Honshu main: diagonal from SW to NE */}
+            {/* SW end ~33.5°N,130°E → x:350,y:156 */}
+            {/* NE end ~41°N,141°E → x:478,y:75 */}
+            <line x1="355" y1="160" x2="390" y2="145" />
+            <line x1="390" y1="145" x2="430" y2="125" />
+            <line x1="430" y1="125" x2="470" y2="95" />
+            <line x1="470" y1="95" x2="485" y2="78" />
+            {/* Return stroke (southern coast) */}
+            <line x1="485" y1="78" x2="480" y2="90" />
+            <line x1="480" y1="90" x2="450" y2="115" />
+            <line x1="450" y1="115" x2="420" y2="140" />
+            <line x1="420" y1="140" x2="385" y2="160" />
+            <line x1="385" y1="160" x2="355" y2="175" />
+            <line x1="355" y1="175" x2="355" y2="160" />
+            
+            {/* Shikoku: 33-34.5°N, 132-135°E → x:373-408, y:145-162 */}
+            <line x1="378" y1="162" x2="405" y2="155" />
+            <line x1="405" y1="155" x2="410" y2="165" />
+            <line x1="410" y1="165" x2="385" y2="175" />
+            <line x1="385" y1="175" x2="378" y2="162" />
+            
+            {/* Kyushu: 31-34°N, 129-132°E → x:338-373, y:151-183 */}
+            <line x1="340" y1="155" x2="370" y2="152" />
+            <line x1="370" y1="152" x2="375" y2="175" />
+            <line x1="375" y1="175" x2="360" y2="195" />
+            <line x1="360" y1="195" x2="338" y2="190" />
+            <line x1="338" y1="190" x2="335" y2="165" />
+            <line x1="335" y1="165" x2="340" y2="155" />
+          </g>
+          
+          {/* Taiwan: 22-25°N, 120-122°E → x:233-257, y:248-280 */}
+          <g stroke="#888" strokeWidth="1.5" fill="none" opacity="0.15">
+            <line x1="240" y1="248" x2="255" y2="252" />
+            <line x1="255" y1="252" x2="252" y2="275" />
+            <line x1="252" y1="275" x2="238" y2="270" />
+            <line x1="238" y1="270" x2="240" y2="248" />
+          </g>
+
+          {/* Location markers - precise positions */}
+          {/* Longquan: 28.1°N, 119.5°E */}
+          <circle cx={geo.longquan.x} cy={geo.longquan.y} r="8" fill={colors.china} />
+          <text x={geo.longquan.x} y={geo.longquan.y + 22} textAnchor="middle" fontSize="10" fill={colors.china} fontWeight="500">{t.map.longquan}</text>
+          
+          {/* Hizen/Arita: 33.2°N, 129.9°E */}
+          <circle cx={geo.hizen.x} cy={geo.hizen.y} r="9" fill={colors.japanLight} stroke={colors.japan} strokeWidth="2" />
+          <text x={geo.hizen.x - 25} y={geo.hizen.y + 22} textAnchor="middle" fontSize="10" fill={colors.japan} fontWeight="500">{t.map.hizen}</text>
+
+          {/* Sanda: 34.9°N, 135.2°E */}
+          <circle cx={geo.sanda.x} cy={geo.sanda.y} r="10" fill={colors.sanda} stroke={colors.sandaLight} strokeWidth="3" />
+          <text x={geo.sanda.x + 20} y={geo.sanda.y + 5} textAnchor="start" fontSize="12" fill={colors.sanda} fontWeight="600">{t.map.sanda}</text>
+
+          {/* Flow arrows */}
+          <defs>
+            <marker id="arrowC" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M 0 0 L 6 3 L 0 6 Z" fill={colors.china} />
+            </marker>
+            <marker id="arrowS" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M 0 0 L 6 3 L 0 6 Z" fill={colors.sanda} />
+            </marker>
+          </defs>
+
+          {/* China (Longquan) to Japan (Sanda) route */}
+          <path d={`M ${geo.longquan.x + 10} ${geo.longquan.y - 8} Q 320 170, ${geo.sanda.x - 12} ${geo.sanda.y + 5}`}
+                fill="none" stroke={colors.china} strokeWidth="2" strokeDasharray="6,4" markerEnd="url(#arrowC)" opacity="0.5" />
+          <text x="310" y="175" textAnchor="middle" fontSize="9" fill={colors.china}>11th c.</text>
+
+          {/* Hizen to Sanda */}
+          <path d={`M ${geo.hizen.x + 8} ${geo.hizen.y - 8} Q 385 140, ${geo.sanda.x - 10} ${geo.sanda.y}`}
+                fill="none" stroke={colors.sanda} strokeWidth="2" strokeDasharray="5,3" markerEnd="url(#arrowS)" opacity="0.6" />
+          <text x="378" y="133" textAnchor="middle" fontSize="9" fill={colors.sanda}>1799</text>
+
+          {/* Country labels */}
+          <text x="140" y="145" textAnchor="middle" fontSize="14" fill={colors.china} fontWeight="400" opacity="0.4">{t.map.china}</text>
+          <text x="325" y="115" textAnchor="middle" fontSize="8" fill="#777" opacity="0.4">{t.map.korea}</text>
+          <text x="460" y="55" textAnchor="middle" fontSize="11" fill={colors.japan} fontWeight="400" opacity="0.4">{t.map.japan}</text>
+        </svg>
+      </div>
+
+      {/* Timeline */}
+      <div style={{ maxWidth: '850px', margin: '0 auto', position: 'relative' }}>
+        
+        {/* China section */}
+        <div style={{ position: 'relative', paddingLeft: '30px' }}>
+          <div style={{ position: 'absolute', left: '6px', top: '20px', bottom: '0', width: '2px', backgroundColor: colors.china, opacity: 0.3 }} />
+          <div style={{ fontSize: '11px', fontWeight: '600', color: colors.china, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '15px' }}>CHINA 中国</div>
+          {chinaItems.map((item) => {
+            const isActive = activeNode === item.id;
+            return (
+              <div key={item.id} onClick={() => setActiveNode(isActive ? null : item.id)} style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '20px', cursor: 'pointer', position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '-24px', top: '3px', width: item.highlight ? '14px' : '10px', height: item.highlight ? '14px' : '10px', borderRadius: '50%', backgroundColor: item.color, border: `2px solid ${colors.bg}`, boxShadow: isActive ? `0 0 0 3px ${colors.light}` : '0 1px 3px rgba(0,0,0,0.15)', zIndex: 2 }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '3px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: '600', color: item.color }}>{item.year}</span>
+                    <span style={{ fontSize: '11px', color: '#9ca3af' }}>{item.era[language]} · {item.location[language]}</span>
+                  </div>
+                  <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#1f2937', marginBottom: '4px' }}>{item.title[language]}</h3>
+                  {isActive && <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: '1.7', marginTop: '8px', animation: 'fadeIn 0.25s ease' }}>{item.description[language]}</p>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Branch to Japan */}
+        <div style={{ position: 'relative', height: '40px', marginLeft: '6px' }}>
+          <svg width="80" height="40" style={{ position: 'absolute', left: '0', top: '-10px' }}>
+            <path d="M 2 0 Q 2 30, 40 35" fill="none" stroke={colors.japan} strokeWidth="2" opacity="0.4" />
+          </svg>
+        </div>
+
+        {/* Japan section */}
+        <div style={{ position: 'relative', paddingLeft: '70px', marginTop: '-10px' }}>
+          <div style={{ position: 'absolute', left: '46px', top: '20px', bottom: '0', width: '2px', backgroundColor: colors.japan, opacity: 0.3 }} />
+          <div style={{ fontSize: '11px', fontWeight: '600', color: colors.japan, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '15px' }}>JAPAN 日本</div>
+          {japanItems.map((item) => {
+            const isActive = activeNode === item.id;
+            return (
+              <div key={item.id} onClick={() => setActiveNode(isActive ? null : item.id)} style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '20px', cursor: 'pointer', position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '-24px', top: '3px', width: item.highlight ? '14px' : '10px', height: item.highlight ? '14px' : '10px', borderRadius: '50%', backgroundColor: item.color, border: `2px solid ${colors.bg}`, boxShadow: isActive ? `0 0 0 3px ${colors.light}` : '0 1px 3px rgba(0,0,0,0.15)', zIndex: 2 }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '3px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: '600', color: item.color }}>{item.year}</span>
+                    <span style={{ fontSize: '11px', color: '#9ca3af' }}>{item.era[language]} · {item.location[language]}</span>
+                  </div>
+                  <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#1f2937', marginBottom: '4px' }}>{item.title[language]}</h3>
+                  {isActive && <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: '1.7', marginTop: '8px', animation: 'fadeIn 0.25s ease' }}>{item.description[language]}</p>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Branch to Sanda */}
+        <div style={{ position: 'relative', height: '40px', marginLeft: '46px' }}>
+          <svg width="80" height="40" style={{ position: 'absolute', left: '0', top: '-10px' }}>
+            <path d="M 2 0 Q 2 30, 40 35" fill="none" stroke={colors.sanda} strokeWidth="2" opacity="0.4" />
+          </svg>
+        </div>
+
+        {/* Sanda section */}
+        <div style={{ position: 'relative', paddingLeft: '110px', marginTop: '-10px' }}>
+          <div style={{ position: 'absolute', left: '86px', top: '20px', bottom: '20px', width: '2px', backgroundColor: colors.sanda, opacity: 0.3 }} />
+          <div style={{ fontSize: '11px', fontWeight: '600', color: colors.sanda, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '15px' }}>SANDA 三田</div>
+          {sandaItems.map((item) => {
+            const isActive = activeNode === item.id;
+            return (
+              <div key={item.id} onClick={() => setActiveNode(isActive ? null : item.id)} style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '20px', cursor: 'pointer', position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '-24px', top: '3px', width: item.highlight ? '14px' : '10px', height: item.highlight ? '14px' : '10px', borderRadius: '50%', backgroundColor: item.color, border: `2px solid ${colors.bg}`, boxShadow: isActive ? `0 0 0 3px ${colors.light}` : '0 1px 3px rgba(0,0,0,0.15)', zIndex: 2 }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '3px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: '600', color: item.color }}>{item.year}</span>
+                    <span style={{ fontSize: '11px', color: '#9ca3af' }}>{item.era[language]} · {item.location[language]}</span>
+                  </div>
+                  <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#1f2937', marginBottom: '4px' }}>{item.title[language]}</h3>
+                  {isActive && (
+                    <div style={{ animation: 'fadeIn 0.25s ease' }}>
+                      <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: '1.7', marginTop: '8px' }}>{item.description[language]}</p>
+                      {item.hasProfile && (
+                        <button onClick={(e) => { e.stopPropagation(); setShowKamesukeProfile(true); }}
+                          style={{ marginTop: '12px', background: 'none', border: `1px solid ${item.color}`, color: item.color, padding: '6px 14px', cursor: 'pointer', fontSize: '12px', borderRadius: '3px', fontFamily: 'inherit' }}
+                        >{t.viewProfile}</button>
+                      )}
+                      {item.hasZuihoProfile && (
+                        <button onClick={(e) => { e.stopPropagation(); setShowZuihoProfile(true); }}
+                          style={{ marginTop: '12px', background: 'none', border: `1px solid ${item.color}`, color: item.color, padding: '6px 14px', cursor: 'pointer', fontSize: '12px', borderRadius: '3px', fontFamily: 'inherit' }}
+                        >{t.viewProfile}</button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <p style={{ textAlign: 'center', fontSize: '12px', color: '#9ca3af', marginTop: '35px' }}>{t.clickHint}</p>
+
+      <footer style={{ marginTop: '60px', padding: '20px', textAlign: 'center', borderTop: '1px solid #eee', color: '#666', fontSize: '14px' }}>
+        <p><a href="https://medium.com/@floclostudio" target="_blank" rel="noopener noreferrer" style={{ color: '#666', margin: '0 10px', textDecoration: 'none' }}>Medium</a>·<a href="https://buymeacoffee.com/floclostudio" target="_blank" rel="noopener noreferrer" style={{ color: '#666', margin: '0 10px', textDecoration: 'none' }}>Buy me a coffee</a></p>
+      </footer>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap');
+      `}</style>
+    </div>
+  );
+};
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(<CeladonTimeline />);
+  </script>
+</body>
+</html>

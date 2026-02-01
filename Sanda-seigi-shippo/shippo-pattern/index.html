@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shippō 七宝 | Seven Treasures Pattern</title>
+  <meta name="description" content="How interlocking circles became vessels for meaning—geometry, Buddhism, and wishes">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+const { useState } = React;
+
+const ShippoPatternExplorer = () => {
+  const [activeSection, setActiveSection] = useState('overview');
+  const [language, setLanguage] = useState('en');
+
+  const colors = {
+    primary: '#0d4f4f',
+    secondary: '#2d8f8f',
+    accent: '#5bb5a6',
+    light: '#c5e8e3',
+    bg: '#f7fafa'
+  };
+
+  // Large background shippo pattern SVG
+  const BackgroundPattern = () => (
+    <svg 
+      style={{ 
+        position: 'absolute', 
+        top: '50%', 
+        left: '50%', 
+        transform: 'translate(-50%, -50%)',
+        width: '150%',
+        height: '150%',
+        opacity: 0.04,
+        pointerEvents: 'none'
+      }}
+      viewBox="0 0 400 400"
+    >
+      {[-1, 0, 1, 2, 3, 4, 5].map(row => 
+        [-1, 0, 1, 2, 3, 4, 5].map(col => (
+          <circle
+            key={`bg-${row}-${col}`}
+            cx={col * 80 + (row % 2 === 0 ? 0 : 40)}
+            cy={row * 80}
+            r="55"
+            fill="none"
+            stroke={colors.primary}
+            strokeWidth="2"
+          />
+        ))
+      )}
+    </svg>
+  );
+
+  const content = {
+    en: {
+      title: 'Shippō 七宝',
+      titleMeaning: 'Seven Treasures',
+      subtitle: 'How a geometric form became a vessel for meaning',
+      toggle: '日本語',
+      sections: {
+        overview: 'Overview',
+        meaning: 'Meaning',
+        history: 'History',
+        usage: 'In Use'
+      },
+      overview: {
+        intro: 'Interlocking circles, extending infinitely in four directions. A pattern so simple it feels universal—and perhaps it is.',
+        geometry: 'The basic unit is elegant: circles of equal size, each overlapping its neighbors at the quarter-point. The result is a field of almond-shaped spaces and four-petaled flowers emerging from the intersections.',
+        question: 'But how did a geometric abstraction become laden with wishes for connection, prosperity, and harmony?'
+      },
+      meaning: {
+        intro: 'The pattern\'s name reveals its accumulated meanings. Two writings, layered over centuries.',
+        names: [
+          {
+            kanji: '四方',
+            reading: 'Shihō',
+            era: 'Original (Nara)',
+            charBreakdown: '四 four + 方 direction',
+            meaning: 'The original name—describing how circles extend in all four directions without end. A geometric observation that became a wish: may prosperity spread everywhere.'
+          },
+          {
+            kanji: '七宝',
+            reading: 'Shippō',
+            era: 'Evolved (Heian)',
+            charBreakdown: '七 seven + 宝 treasure',
+            meaning: 'Through phonetic drift, "shihō" became "shippō"—and geometry gained Buddhist weight. The seven treasures: 金 gold, 銀 silver, 瑠璃 lapis lazuli, 玻璃 crystal, 珊瑚 coral, 瑪瑙 agate, 硨磲 giant clam.'
+          }
+        ],
+        layers: [
+          { kanji: '無限', reading: 'mugen', label: 'Infinity', desc: 'Circles extending without end. The mathematical sublime.' },
+          { kanji: '繁栄', reading: "han'ei", label: 'Prosperity', desc: 'Spreading in all directions, reaching everywhere.' },
+          { kanji: '縁', reading: 'en', label: 'Connection', desc: 'Each circle touches others. Bonds, relationships, fate.' }
+        ],
+        reflection: 'Which meaning is correct? Perhaps all of them. Meaning isn\'t discovered—it accumulates.'
+      },
+      history: [
+        { year: 'c. 2600 BCE', place: 'Indus Valley', event: 'Similar patterns appear on ancient artifacts. The form emerges wherever humans contemplate infinity.' },
+        { year: '8th century', place: 'Nara, Japan', event: 'Arrives as yūsoku monyō (有職文様)—formal patterns for aristocratic dress and imperial furnishings.' },
+        { year: 'Heian-Kamakura', place: 'Japan', event: 'Name transforms: 四方 shihō → 七宝 shippō. Buddhist meaning layers onto geometric form.' },
+        { year: 'Edo period', place: 'Japan', event: 'Democratizes from nobility to commoners. Appears on ceramics, textiles, family crests (家紋).' },
+        { year: 'Present', place: 'Global', event: 'Persists in traditional crafts and modern design—including Sanda celadon.' }
+      ],
+      usage: {
+        intro: 'The pattern found homes across Japanese material culture:',
+        categories: [
+          { ja: '家紋', en: 'Family Crests', items: 'Sasaki clan, Ōoka (the magistrate), Kobori Enshū' },
+          { ja: '陶磁器', en: 'Ceramics', items: 'Imari, Kutani, Sanda celadon' },
+          { ja: '織物', en: 'Textiles', items: 'Kimono, obi, court dress' },
+          { ja: '建築', en: 'Architecture', items: 'Transom carvings, lattice windows' }
+        ],
+        giftNote: {
+          kanji: '贈答',
+          reading: 'Zōtō',
+          title: 'The Act of Giving',
+          content: 'Traditionally given as a wish for good relationships. When you choose shippō, you\'re not choosing a pattern—you\'re choosing a wish: may our connection extend infinitely.'
+        }
+      }
+    },
+    ja: {
+      title: '七宝 Shippō',
+      titleMeaning: '七つの宝',
+      subtitle: '幾何学形がいかにして意味を宿すに至ったか',
+      toggle: 'English',
+      sections: {
+        overview: '概要',
+        meaning: '意味',
+        history: '歴史',
+        usage: '用途'
+      },
+      overview: {
+        intro: '連なり合う円が、四方に無限に広がる。あまりにシンプルで普遍的に感じられる紋様——実際、そうなのかもしれない。',
+        geometry: '基本単位は優美だ。同じ大きさの円がそれぞれ隣と四分の一で重なり合う。交差点からアーモンド形の空間と四弁の花が現れる。',
+        question: 'しかし、幾何学的な抽象がどのようにしてつながり、繁栄、調和への願いを込めた器となったのか？'
+      },
+      meaning: {
+        intro: 'この紋様の名前は、何世紀もかけて蓄積された意味を物語る。二つの表記、重なる層。',
+        names: [
+          {
+            kanji: '四方',
+            reading: 'しほう',
+            era: '原名（奈良）',
+            charBreakdown: '四 よっつ + 方 ほうがく',
+            meaning: '元の名前——円が四方に果てしなく広がる様を表す。幾何学的観察が願いとなった：繁栄があらゆる方向に広がりますように。'
+          },
+          {
+            kanji: '七宝',
+            reading: 'しっぽう',
+            era: '変化（平安）',
+            charBreakdown: '七 ななつ + 宝 たから',
+            meaning: '音の類似から「しほう」が「しっぽう」へ変化し、幾何学が仏教の重みを帯びた。七宝とは：金・銀・瑠璃・玻璃・珊瑚・瑪瑙・硨磲。'
+          }
+        ],
+        layers: [
+          { kanji: '無限', reading: 'むげん', label: '無限', desc: '円が果てしなく広がる。数学的な崇高。' },
+          { kanji: '繁栄', reading: 'はんえい', label: '繁栄', desc: 'あらゆる方向に広がり、どこまでも届く。' },
+          { kanji: '縁', reading: 'えん', label: 'つながり', desc: '各円が他と触れ合う。絆、関係、運命。' }
+        ],
+        reflection: 'どの意味が正しいのか？おそらく、すべて。意味とは発見されるものではなく、蓄積されるもの。'
+      },
+      history: [
+        { year: '紀元前2600年頃', place: 'インダス文明', event: '古代の遺物に類似の紋様。人類が無限を思考するところに現れる形。' },
+        { year: '8世紀', place: '奈良・日本', event: '有職文様として伝来——貴族の衣装や宮中調度に用いられる格式ある紋様に。' },
+        { year: '平安〜鎌倉', place: '日本', event: '名前が変化：四方→七宝。仏教的な意味が幾何学に重なる。' },
+        { year: '江戸時代', place: '日本', event: '貴族から庶民へ広がる。陶磁器、織物、家紋に登場。' },
+        { year: '現代', place: '世界', event: '伝統工芸と現代デザインに——三田青磁にも。' }
+      ],
+      usage: {
+        intro: 'この紋様は日本の物質文化のあらゆる場所に居場所を見つけた：',
+        categories: [
+          { ja: '家紋', en: 'Family Crests', items: '佐々木氏、大岡氏（名奉行）、小堀遠州' },
+          { ja: '陶磁器', en: 'Ceramics', items: '伊万里、九谷、三田青磁' },
+          { ja: '織物', en: 'Textiles', items: '着物、帯、宮中の正装' },
+          { ja: '建築', en: 'Architecture', items: '欄間彫刻、格子窓' }
+        ],
+        giftNote: {
+          kanji: '贈答',
+          reading: 'ぞうとう',
+          title: '贈るという行為',
+          content: '伝統的に、良縁と拡がる幸運を願って贈られてきた。七宝を選ぶとき、紋様を選んでいるのではない——願いを選んでいるのだ：私たちのつながりが、無限に広がりますように。'
+        }
+      }
+    }
+  };
+
+  const t = content[language];
+
+  const renderShippoSVG = () => (
+    <svg viewBox="0 0 180 180" style={{ width: '100%', maxWidth: '200px', margin: '20px auto', display: 'block' }}>
+      <defs>
+        <clipPath id="clip">
+          <rect x="15" y="15" width="150" height="150" />
+        </clipPath>
+      </defs>
+      <g clipPath="url(#clip)">
+        {[0, 1, 2, 3, 4].map(row => 
+          [0, 1, 2, 3, 4].map(col => (
+            <circle
+              key={`${row}-${col}`}
+              cx={col * 38 + (row % 2 === 0 ? 15 : 34)}
+              cy={row * 38 + 15}
+              r="26"
+              fill="none"
+              stroke={colors.primary}
+              strokeWidth="1.2"
+              opacity="0.5"
+            />
+          ))
+        )}
+      </g>
+    </svg>
+  );
+
+  const renderSection = () => {
+    switch (activeSection) {
+      case 'overview':
+        return (
+          <div style={{ animation: 'fadeIn 0.3s ease', position: 'relative', overflow: 'hidden', minHeight: '350px' }}>
+            <BackgroundPattern />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <p style={{ fontSize: '17px', lineHeight: '1.8', color: '#4a5568', marginBottom: '20px', fontStyle: 'italic' }}>{t.overview.intro}</p>
+              {renderShippoSVG()}
+              <p style={{ fontSize: '15px', lineHeight: '1.8', color: '#636e72', marginBottom: '15px' }}>{t.overview.geometry}</p>
+              <p style={{ fontSize: '15px', lineHeight: '1.8', color: colors.primary, fontWeight: '500' }}>{t.overview.question}</p>
+            </div>
+          </div>
+        );
+      
+      case 'meaning':
+        return (
+          <div style={{ animation: 'fadeIn 0.3s ease', position: 'relative', overflow: 'hidden', minHeight: '500px' }}>
+            <BackgroundPattern />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <p style={{ fontSize: '16px', lineHeight: '1.8', color: '#4a5568', marginBottom: '25px', fontStyle: 'italic' }}>{t.meaning.intro}</p>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '30px' }}>
+                {t.meaning.names.map((n, i) => (
+                  <div key={i} style={{ padding: '20px', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '6px', boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
+                    <div style={{ fontSize: '36px', fontWeight: '300', color: colors.primary, marginBottom: '5px', fontFamily: '"Noto Serif JP", serif' }}>{n.kanji}</div>
+                    <div style={{ fontSize: '14px', color: colors.secondary, marginBottom: '3px' }}>{n.reading}</div>
+                    <div style={{ fontSize: '10px', color: '#adb5bd', marginBottom: '10px' }}>{n.era} · {n.charBreakdown}</div>
+                    <p style={{ fontSize: '13px', color: '#636e72', lineHeight: '1.6' }}>{n.meaning}</p>
+                  </div>
+                ))}
+              </div>
+              
+              <div style={{ display: 'flex', gap: '10px', marginBottom: '25px' }}>
+                {t.meaning.layers.map((l, i) => (
+                  <div key={i} style={{ flex: 1, padding: '15px', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '4px', borderTop: `3px solid ${colors.accent}`, textAlign: 'center' }}>
+                    <div style={{ fontSize: '24px', color: colors.primary, marginBottom: '3px', fontFamily: '"Noto Serif JP", serif' }}>{l.kanji}</div>
+                    <div style={{ fontSize: '10px', color: '#adb5bd', marginBottom: '5px' }}>{l.reading}</div>
+                    <div style={{ fontSize: '12px', fontWeight: '600', color: colors.secondary, marginBottom: '5px' }}>{l.label}</div>
+                    <p style={{ fontSize: '11px', color: '#636e72', lineHeight: '1.5' }}>{l.desc}</p>
+                  </div>
+                ))}
+              </div>
+              
+              <p style={{ fontSize: '14px', lineHeight: '1.7', color: colors.primary, padding: '15px', backgroundColor: 'rgba(240,249,248,0.95)', borderRadius: '4px', fontStyle: 'italic' }}>{t.meaning.reflection}</p>
+            </div>
+          </div>
+        );
+      
+      case 'history':
+        return (
+          <div style={{ animation: 'fadeIn 0.3s ease', position: 'relative', overflow: 'hidden', minHeight: '350px' }}>
+            <BackgroundPattern />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              {t.history.map((item, i) => (
+                <div key={i} style={{ display: 'flex', gap: '15px', marginBottom: '20px', paddingBottom: '20px', borderBottom: i < t.history.length - 1 ? `1px solid ${colors.light}` : 'none', backgroundColor: 'rgba(247,250,250,0.8)', padding: '15px', borderRadius: '4px' }}>
+                  <div style={{ minWidth: '100px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: '600', color: colors.primary }}>{item.year}</div>
+                    <div style={{ fontSize: '10px', color: '#adb5bd' }}>{item.place}</div>
+                  </div>
+                  <p style={{ fontSize: '14px', color: '#4a5568', lineHeight: '1.6', flex: 1 }}>{item.event}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      
+      case 'usage':
+        return (
+          <div style={{ animation: 'fadeIn 0.3s ease', position: 'relative', overflow: 'hidden', minHeight: '400px' }}>
+            <BackgroundPattern />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <p style={{ fontSize: '15px', color: '#4a5568', marginBottom: '20px' }}>{t.usage.intro}</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '25px' }}>
+                {t.usage.categories.map((c, i) => (
+                  <div key={i} style={{ padding: '12px 15px', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '4px' }}>
+                    <div style={{ fontSize: '14px', fontWeight: '500', color: colors.primary, fontFamily: '"Noto Serif JP", serif' }}>{c.ja}</div>
+                    <div style={{ fontSize: '10px', color: '#adb5bd', marginBottom: '5px' }}>{c.en}</div>
+                    <div style={{ fontSize: '12px', color: '#636e72' }}>{c.items}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ padding: '20px', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '6px', border: `2px solid ${colors.light}` }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '22px', color: colors.primary, fontFamily: '"Noto Serif JP", serif' }}>{t.usage.giftNote.kanji}</span>
+                  <span style={{ fontSize: '13px', color: colors.secondary }}>{t.usage.giftNote.reading}</span>
+                  <span style={{ fontSize: '12px', color: '#636e72' }}>— {t.usage.giftNote.title}</span>
+                </div>
+                <p style={{ fontSize: '14px', lineHeight: '1.7', color: '#4a5568' }}>{t.usage.giftNote.content}</p>
+              </div>
+            </div>
+          </div>
+        );
+      
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div style={{ fontFamily: '"Cormorant Garamond", "Noto Serif JP", Georgia, serif', backgroundColor: colors.bg, minHeight: '100vh', padding: '30px 20px', color: '#2d3436' }}>
+      <button onClick={() => setLanguage(language === 'en' ? 'ja' : 'en')} style={{ position: 'fixed', top: '20px', right: '20px', background: 'none', border: `1px solid ${colors.primary}`, color: colors.primary, padding: '6px 14px', cursor: 'pointer', fontSize: '13px', borderRadius: '2px', zIndex: 100 }}>{t.toggle}</button>
+      
+      <div style={{ maxWidth: '650px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          <h1 style={{ fontSize: '34px', fontWeight: '300', color: colors.primary, marginBottom: '3px' }}>{t.title}</h1>
+          <p style={{ fontSize: '13px', color: colors.secondary, marginBottom: '8px' }}>{t.titleMeaning}</p>
+          <p style={{ fontSize: '15px', color: '#6c757d', fontStyle: 'italic' }}>{t.subtitle}</p>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '5px', marginBottom: '30px' }}>
+          {Object.entries(t.sections).map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setActiveSection(key)}
+              style={{
+                padding: '8px 16px',
+                border: activeSection === key ? `2px solid ${colors.primary}` : `1px solid ${colors.light}`,
+                backgroundColor: activeSection === key ? colors.primary : 'transparent',
+                color: activeSection === key ? '#fff' : colors.primary,
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                fontSize: '12px',
+                borderRadius: '2px',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div style={{ minHeight: '350px' }}>{renderSection()}</div>
+      </div>
+
+      <footer style={{ marginTop: '60px', padding: '20px', textAlign: 'center', borderTop: '1px solid #eee', color: '#666', fontSize: '14px' }}>
+        <p>
+          <a href="https://medium.com/@floclostudio" target="_blank" rel="noopener noreferrer" style={{ color: '#666', margin: '0 10px', textDecoration: 'none' }}>Medium</a>
+          ·
+          <a href="https://buymeacoffee.com/floclostudio" target="_blank" rel="noopener noreferrer" style={{ color: '#666', margin: '0 10px', textDecoration: 'none' }}>Buy me a coffee</a>
+        </p>
+      </footer>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap');
+      `}</style>
+    </div>
+  );
+};
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(<ShippoPatternExplorer />);
+  </script>
+</body>
+</html>

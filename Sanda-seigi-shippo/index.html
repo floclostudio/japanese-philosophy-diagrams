@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanda Celadon | 三田青磁</title>
+  <meta name="description" content="Interactive explorations of Sanda celadon, Japanese ceramics, and traditional patterns">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Cormorant Garamond', 'Noto Serif JP', Georgia, serif;
+      background: linear-gradient(180deg, #f7fafa 0%, #e8f4f2 100%);
+      min-height: 100vh;
+      color: #2d3436;
+    }
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    h1 {
+      font-size: 36px;
+      font-weight: 300;
+      color: #0d4f4f;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #6b7b7b;
+      font-style: italic;
+    }
+    .lang-toggle {
+      margin-top: 20px;
+    }
+    .lang-toggle button {
+      background: none;
+      border: none;
+      font-size: 13px;
+      cursor: pointer;
+      color: #888;
+      padding: 4px 8px;
+    }
+    .lang-toggle button.active {
+      color: #2d3436;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .card {
+      display: block;
+      background: #fff;
+      border: 1px solid #e0e8e8;
+      border-radius: 4px;
+      padding: 28px 32px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+    .card:hover {
+      border-color: #0d4f4f;
+      box-shadow: 0 4px 16px rgba(13, 79, 79, 0.08);
+      transform: translateY(-2px);
+    }
+    .card-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #0d4f4f;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .card-title {
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 14px;
+      color: #6b7b7b;
+      line-height: 1.7;
+    }
+    footer {
+      margin-top: 80px;
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid #e0e8e8;
+    }
+    footer p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+    footer a {
+      color: #0d4f4f;
+      text-decoration: none;
+      margin: 0 12px;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Sanda Celadon</h1>
+      <p class="subtitle" id="subtitle-en">Interactive explorations of Japanese ceramics and patterns</p>
+      <p class="subtitle hidden" id="subtitle-ja">日本の陶磁器と文様のインタラクティブな探求</p>
+      <div class="lang-toggle">
+        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+        <span style="color: #ddd">·</span>
+        <button id="btn-ja" onclick="setLang('ja')">JA</button>
+      </div>
+    </header>
+
+    <div class="cards">
+      <a href="./celadon-timeline/" class="card">
+        <div class="card-label" data-en="Timeline" data-ja="年表">Timeline</div>
+        <h2 class="card-title" data-en="The Journey of Celadon" data-ja="青磁の旅路">The Journey of Celadon</h2>
+        <p class="card-desc" data-en="From ancient China to a small town in Japan—3,000 years of ceramic history." data-ja="古代中国から日本の小さな町へ——3,000年の陶磁器史。">From ancient China to a small town in Japan—3,000 years of ceramic history.</p>
+      </a>
+
+      <a href="./shippo-pattern/" class="card">
+        <div class="card-label" data-en="Pattern" data-ja="文様">Pattern</div>
+        <h2 class="card-title" data-en="Shippō 七宝" data-ja="七宝 Shippō">Shippō 七宝</h2>
+        <p class="card-desc" data-en="How interlocking circles became vessels for meaning—geometry, Buddhism, and wishes." data-ja="連なる円がいかに意味を宿すに至ったか——幾何学、仏教、そして願い。">How interlocking circles became vessels for meaning—geometry, Buddhism, and wishes.</p>
+      </a>
+
+      <a href="./links/" class="card">
+        <div class="card-label" data-en="Visit" data-ja="訪問">Visit</div>
+        <h2 class="card-title" data-en="Experience Sanda Celadon" data-ja="三田青磁を体験する">Experience Sanda Celadon</h2>
+        <p class="card-desc" data-en="Workshops, museums, and Expo 2025 programs—plan your visit." data-ja="体験教室、史跡、万博2025プログラム——訪問の計画に。">Workshops, museums, and Expo 2025 programs—plan your visit.</p>
+      </a>
+    </div>
+
+    <footer>
+      <p data-en="Part of an ongoing exploration into Japanese craft and aesthetics." data-ja="日本の工芸と美学についての継続的な探求の一部です。">Part of an ongoing exploration into Japanese craft and aesthetics.</p>
+      <div>
+        <a href="https://medium.com/@floclostudio">Medium</a>
+        ·
+        <a href="https://buymeacoffee.com/floclostudio">Buy me a coffee</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang) {
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
+      document.getElementById('subtitle-en').classList.toggle('hidden', lang !== 'en');
+      document.getElementById('subtitle-ja').classList.toggle('hidden', lang !== 'ja');
+      
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + lang);
+      });
+    }
+  </script>
+</body>
+</html>
