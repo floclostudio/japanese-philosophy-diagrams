@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sugata Model — floclo studio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@200;300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a08;
+    color: #e8e4dc;
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+  }
+
+  .canvas {
+    width: 1080px;
+    min-height: 1420px;
+    position: relative;
+    background: #0a0a08;
+    overflow: hidden;
+  }
+
+  .canvas::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* ---- HEADER ---- */
+  .header {
+    padding: 42px 52px 12px;
+    position: relative; z-index: 10;
+  }
+  .header-kicker {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300; font-size: 10px;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: rgba(232,228,220,0.28); margin-bottom: 14px;
+  }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-size: 34px;
+    letter-spacing: 0.02em;
+    color: rgba(232,228,220,0.88);
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .header-title em {
+    font-style: italic;
+    color: rgba(232,228,220,0.65);
+  }
+  .header-jp {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 200; font-size: 15px;
+    letter-spacing: 0.12em;
+    color: rgba(232,228,220,0.3);
+    margin-bottom: 16px;
+  }
+  .header-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-size: 15.5px;
+    line-height: 1.7;
+    color: rgba(232,228,220,0.48);
+    max-width: 720px;
+  }
+  .header-body em {
+    font-style: italic;
+    color: rgba(232,228,220,0.58);
+  }
+
+  /* ---- PANELS ---- */
+  .panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    position: relative; z-index: 2;
+    margin-top: 12px;
+  }
+  .panels::before {
+    content: ''; position: absolute;
+    left: 50%; top: 0; bottom: 0; width: 1px;
+    background: rgba(232,228,220,0.06); z-index: 5;
+  }
+
+  .panel {
+    position: relative;
+    padding: 24px 36px;
+    border-bottom: 1px solid rgba(232,228,220,0.05);
+  }
+  .panel-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400; font-size: 20px;
+    letter-spacing: 0.02em;
+    margin-bottom: 2px;
+  }
+  .panel-kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300; font-size: 12px;
+    letter-spacing: 0.12em;
+    color: rgba(232,228,220,0.2);
+    margin-bottom: 10px;
+  }
+  .panel-summary {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-size: 13.5px;
+    line-height: 1.7;
+    color: rgba(232,228,220,0.5);
+    max-width: 440px; margin-bottom: 14px;
+  }
+  .panel-summary em {
+    font-style: italic;
+    color: rgba(232,228,220,0.62);
+  }
+  .panel svg { width: 100%; height: auto; display: block; }
+
+  /* ---- TOOLTIP ---- */
+  .tooltip {
+    position: fixed; pointer-events: none;
+    z-index: 200;
+    background: rgba(10,10,8,0.94);
+    border: 1px solid rgba(232,228,220,0.1);
+    padding: 16px 20px; max-width: 310px;
+    opacity: 0; transition: opacity 0.18s;
+    backdrop-filter: blur(10px);
+  }
+  .tooltip.visible { opacity: 1; }
+  .tooltip-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400; font-size: 17px;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+  .tooltip-kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300; font-size: 11px;
+    letter-spacing: 0.08em;
+    color: rgba(232,228,220,0.25);
+    margin-bottom: 8px;
+  }
+  .tooltip-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-size: 13px;
+    line-height: 1.7; color: rgba(232,228,220,0.68);
+    margin-bottom: 10px;
+  }
+  .tooltip-bar {
+    display: flex; flex-direction: column; gap: 3px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 10px; line-height: 1.4;
+    border-top: 1px solid rgba(232,228,220,0.06);
+    padding-top: 8px;
+  }
+  .tooltip-bar .lbl { color: rgba(232,228,220,0.25); }
+  .tooltip-bar .val { color: rgba(232,228,220,0.5); }
+  .tooltip-bar .pos { color: rgba(138,154,122,0.55); }
+  .tooltip-bar .neg { color: rgba(196,113,59,0.45); }
+
+  .data-pt { cursor: pointer; }
+  .data-pt:hover { filter: brightness(1.6); }
+
+  /* ---- MOBILE ---- */
+  @media (max-width: 768px) {
+    body { align-items: flex-start; }
+    .canvas { width: 100%; min-height: auto; }
+    .header { padding: 28px 24px 10px; }
+    .header-title { font-size: 24px; }
+    .header-jp { font-size: 13px; }
+    .header-body { font-size: 14px; max-width: 100%; }
+    .panels {
+      grid-template-columns: 1fr;
+    }
+    .panels::before { display: none; }
+    .panel { padding: 20px 20px; }
+    .panel-name { font-size: 18px; }
+    .panel-summary { font-size: 13px; max-width: 100%; }
+    .panel svg { width: 100%; height: auto; }
+    /* Larger touch targets on mobile */
+    .data-pt { touch-action: manipulation; }
+    .tooltip {
+      left: 12px !important;
+      right: 12px !important;
+      bottom: 16px !important;
+      top: auto !important;
+      max-width: none;
+      width: auto;
+    }
+    .brand { padding: 16px 24px 24px; }
+  }
+
+  .brand {
+    text-align: right; padding: 20px 52px 32px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300; font-size: 10px;
+    letter-spacing: 0.3em;
+    color: rgba(232,228,220,0.16);
+    position: relative; z-index: 10;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="header">
+    <div class="header-kicker">Beyond Wabi-sabi — The Sugata Model</div>
+    <div class="header-title">The problem was never the fire.<br>It was the <em>sugata.</em></div>
+    <div class="header-jp">姿 — sugata</div>
+    <div class="header-body">
+      The beauty the West calls wabi-sabi is the fired bowl. What crossed the ocean was the <em>recipe</em>.
+      What stayed behind was the <em>kiln</em> — the full heat of fire, ego, and contradiction.<br><br>
+      Three practitioners. Same fire. Three radically different sugata.
+      Hover each point to trace what happened — and where the shape distorted.
+    </div>
+  </div>
+
+  <div class="panels">
+
+    <!-- ============================================ -->
+    <!-- MODEL                                        -->
+    <!-- ============================================ -->
+    <div class="panel">
+      <div class="panel-name" style="color: rgba(232,228,220,0.7);">The Sugata Model</div>
+      <div class="panel-kanji">器 utsuwa × 姿 sugata</div>
+      <div class="panel-summary">
+        The <em>vessel</em> is how much fire you can hold.
+        The <em>sugata</em> is how that fire appears in the world.
+        It expands in three dimensions: <em>Impact+</em>, <em>Impact−</em>, and <em>Aspiration</em>.
+        A large vessel with a distorted sugata is dangerous.
+        A beautiful sugata with a small vessel is decoration.
+      </div>
+      <svg viewBox="0 0 480 340" fill="none">
+        <!-- Floor grid -->
+        <line x1="60" y1="290" x2="420" y2="290" stroke="rgba(232,228,220,0.08)" stroke-width="0.5"/>
+        <line x1="60" y1="290" x2="160" y2="190" stroke="rgba(232,228,220,0.06)" stroke-width="0.5"/>
+        <line x1="60" y1="290" x2="20" y2="318" stroke="rgba(232,228,220,0.04)" stroke-width="0.5"/>
+        <line x1="420" y1="290" x2="460" y2="250" stroke="rgba(232,228,220,0.04)" stroke-width="0.4"/>
+        <line x1="160" y1="190" x2="460" y2="190" stroke="rgba(232,228,220,0.04)" stroke-width="0.4"/>
+        <line x1="110" y1="240" x2="440" y2="240" stroke="rgba(232,228,220,0.03)" stroke-width="0.3"/>
+        <line x1="240" y1="325" x2="310" y2="190" stroke="rgba(232,228,220,0.03)" stroke-width="0.3"/>
+
+        <!-- Axes -->
+        <line x1="60" y1="290" x2="430" y2="290" stroke="rgba(212,147,90,0.5)" stroke-width="1.5"/>
+        <line x1="60" y1="290" x2="164" y2="186" stroke="rgba(232,228,220,0.38)" stroke-width="1.3"/>
+        <line x1="60" y1="290" x2="16" y2="322" stroke="rgba(232,228,220,0.2)" stroke-width="1" stroke-dasharray="3 2"/>
+        <line x1="60" y1="286" x2="60" y2="42" stroke="rgba(138,154,122,0.5)" stroke-width="1.5"/>
+        <circle cx="60" cy="290" r="3.5" fill="#d4935a" opacity="0.45"/>
+        <polygon points="430,286 430,294 440,290" fill="rgba(212,147,90,0.45)"/>
+        <polygon points="162,184 168,190 158,192" fill="rgba(232,228,220,0.3)"/>
+        <polygon points="58,42 62,42 60,32" fill="rgba(138,154,122,0.45)"/>
+
+        <!-- Cone -->
+        <path d="M 68 285 C 160 262, 280 228, 400 200" stroke="rgba(232,228,220,0.22)" stroke-width="1.1" fill="none"/>
+        <path d="M 64 295 C 150 304, 280 316, 370 322" stroke="rgba(232,228,220,0.13)" stroke-width="1" fill="none" stroke-dasharray="4 3"/>
+        <path d="M 64 280 C 140 232, 250 148, 365 72" stroke="rgba(138,154,122,0.42)" stroke-width="1.8" fill="none"/>
+        <path d="M 68 285 C 160 262, 280 228, 400 200 L 365 72 C 250 148, 140 232, 64 280 Z" fill="rgba(232,228,220,0.025)"/>
+        <path d="M 64 295 C 150 304, 280 316, 370 322 L 365 72 C 250 148, 140 232, 64 280 Z" fill="rgba(232,228,220,0.04)"/>
+        <line x1="265" y1="236" x2="248" y2="158" stroke="rgba(232,228,220,0.1)" stroke-width="0.6"/>
+        <line x1="265" y1="314" x2="248" y2="158" stroke="rgba(232,228,220,0.07)" stroke-width="0.6"/>
+        <line x1="265" y1="236" x2="265" y2="314" stroke="rgba(232,228,220,0.08)" stroke-width="0.5" stroke-dasharray="2 3"/>
+        <circle cx="365" cy="72" r="5" fill="#8a9a7a" opacity="0.35"/>
+
+        <!-- Labels -->
+        <text x="436" y="295" fill="rgba(212,147,90,0.72)" font-family="'Cormorant Garamond'" font-size="15" font-weight="300" font-style="italic">time</text>
+        <text x="170" y="184" fill="rgba(232,228,220,0.70)" font-family="'Cormorant Garamond'" font-size="14" font-weight="300" font-style="italic">impact +</text>
+        <text x="4" y="336" fill="rgba(232,228,220,0.41)" font-family="'Cormorant Garamond'" font-size="13" font-weight="300" font-style="italic">impact −</text>
+        <text x="16" y="38" fill="rgba(138,154,122,0.72)" font-family="'Cormorant Garamond'" font-size="15" font-weight="300" font-style="italic">aspiration</text>
+        <text x="16" y="53" fill="rgba(138,154,122,0.41)" font-family="'Noto Serif JP'" font-size="11" font-weight="300">志 — kokorozashi</text>
+        <text x="44" y="308" fill="rgba(212,147,90,0.51)" font-family="'Noto Serif JP'" font-size="11" font-weight="300">火種</text>
+        <text x="44" y="320" fill="rgba(212,147,90,0.29)" font-family="'Cormorant Garamond'" font-size="10" font-style="italic">the spark</text>
+        <text x="372" y="67" fill="rgba(138,154,122,0.43)" font-family="'Cormorant Garamond'" font-size="11" font-style="italic">apex</text>
+      </svg>
+    </div>
+
+
+    <!-- ============================================ -->
+    <!-- RIKYU                                        -->
+    <!-- ============================================ -->
+    <div class="panel">
+      <div class="panel-name" style="color: rgba(196,113,59,0.8);">Sen no Rikyū</div>
+      <div class="panel-kanji">千利休 — 1522–1591</div>
+      <div class="panel-summary">
+        The cone expands beautifully — then <em>distorts</em>.
+        His aspiration peaked at a tea gathering open to all classes.
+        In the same years, his aesthetic monopoly harmed the very world he'd opened.
+        The cone collapses. This is <em>makyo</em> — the zone where
+        ego and service become indistinguishable.
+      </div>
+      <svg viewBox="0 0 480 310" fill="none" id="svg-rikyu">
+        <line x1="55" y1="265" x2="440" y2="265" stroke="rgba(212,147,90,0.22)" stroke-width="0.8"/>
+        <line x1="55" y1="265" x2="155" y2="165" stroke="rgba(232,228,220,0.12)" stroke-width="0.7"/>
+        <line x1="55" y1="265" x2="18" y2="292" stroke="rgba(232,228,220,0.08)" stroke-width="0.6" stroke-dasharray="3 2"/>
+        <line x1="55" y1="261" x2="55" y2="22" stroke="rgba(138,154,122,0.15)" stroke-width="0.7"/>
+        <circle cx="55" cy="265" r="2.5" fill="#d4935a" opacity="0.3"/>
+
+        <path d="M 63 261 C 130 248, 220 228, 285 218 C 320 212, 360 210, 390 222" stroke="#c4713b" stroke-width="1.2" stroke-opacity="0.42" fill="none"/>
+        <path d="M 59 270 C 120 276, 200 285, 260 292 C 300 298, 340 308, 365 325" stroke="#c4713b" stroke-width="1" stroke-opacity="0.24" fill="none"/>
+        <path d="M 59 255 C 120 218, 210 158, 275 115 C 310 98, 345 88, 370 92 L 392 218" stroke="#c4713b" stroke-width="1.8" stroke-opacity="0.5" fill="none"/>
+        <path d="M 63 261 C 130 248, 220 228, 285 218 C 320 212, 360 210, 390 222 L 392 218 L 370 92 C 345 88, 310 98, 275 115 C 210 158, 120 218, 59 255 Z" fill="#c4713b" fill-opacity="0.04"/>
+        <path d="M 59 270 C 120 276, 200 285, 260 292 C 300 298, 340 308, 365 325 L 392 218 L 370 92 C 345 88, 310 98, 275 115 C 210 158, 120 218, 59 255 Z" fill="#c4713b" fill-opacity="0.065"/>
+        <path d="M 370 92 L 392 218" stroke="rgba(180,90,70,0.24)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="285" y1="218" x2="275" y2="115" stroke="#c4713b" stroke-width="0.5" stroke-opacity="0.15"/>
+        <line x1="260" y1="292" x2="275" y2="115" stroke="#c4713b" stroke-width="0.5" stroke-opacity="0.12"/>
+
+        <circle class="data-pt" cx="100" cy="236" r="7" fill="#c4713b" opacity="0.001"
+          data-en="Chazenichimi" data-jp="茶禅一味" data-body="Tea and Zen as one practice. Commerce and awakening were never separate paths in the Sakai merchant tradition." data-pos="Self, his teacher" data-neg="—" data-asp="The Way"/>
+        <circle cx="100" cy="236" r="4" fill="#c4713b" opacity="0.5" pointer-events="none"/>
+
+        <circle class="data-pt" cx="175" cy="198" r="7" fill="#c4713b" opacity="0.001"
+          data-en="Tea Master, Third Rank" data-jp="茶頭三番手" data-body="Appointed as Nobunaga's tea master — but ranked third. The constraint of not being first ignited innovation by subtraction." data-pos="The ruling circle" data-neg="Rival tea masters displaced" data-asp="Status"/>
+        <circle cx="175" cy="198" r="4" fill="#c4713b" opacity="0.48" pointer-events="none"/>
+
+        <circle class="data-pt" cx="230" cy="152" r="8" fill="#c4713b" opacity="0.001"
+          data-en="The Aesthetic of Less" data-jp="引き算の美学" data-body="Unable to afford Chinese ceramics, he found beauty in rough domestic ware. What you subtract reveals what matters. This became the brand." data-pos="Society (a new aesthetic)" data-neg="Chinese ware owners (value collapse)" data-asp="Beauty"/>
+        <circle cx="230" cy="152" r="5" fill="#c4713b" opacity="0.52" pointer-events="none"/>
+
+        <circle class="data-pt" cx="275" cy="115" r="8" fill="#c4713b" opacity="0.001"
+          data-en="Nijiriguchi" data-jp="躙り口" data-body="A door so small that warlords must remove their swords and crawl. Equality made architectural. Also: a merchant forcing warriors to kneel. Both at once, inseparable." data-pos="Guests (equality experienced)" data-neg="Warriors (authority undermined)" data-asp="Equality + Power (fused)"/>
+        <circle cx="275" cy="115" r="5.5" fill="#c4713b" opacity="0.55" pointer-events="none"/>
+
+        <circle class="data-pt" cx="340" cy="90" r="9" fill="#c4713b" opacity="0.001"
+          data-en="The Grand Tea Gathering" data-jp="北野大茶湯" data-body="1587. One thousand people, regardless of class. Bring one bowl — that is enough. Rikyū and Hideyoshi served tea to commoners with their own hands. The apex of aspiration." data-pos="1,000 people across all classes" data-neg="—" data-asp="Tea for all (peak)"/>
+        <circle cx="340" cy="90" r="6.5" fill="#c4713b" opacity="0.6" pointer-events="none"/>
+
+        <circle class="data-pt" cx="383" cy="168" r="8" fill="#c4713b" opacity="0.001"
+          data-en="Aesthetic Monopoly" data-jp="美の独占" data-body="His endorsement could make a single bowl worth a province. The aesthetic of less became the instrument of monopoly. Aspiration collapses." data-pos="Endorsed disciples and artisans" data-neg="Society (value manipulation)" data-asp="Ego (sudden fall)"/>
+        <circle cx="383" cy="168" r="4.5" fill="#c4713b" opacity="0.42" pointer-events="none"/>
+
+        <circle class="data-pt" cx="400" cy="225" r="7" fill="#c4713b" opacity="0.001"
+          data-en="Seppuku" data-jp="切腹" data-body="Accused of profiteering under the guise of priesthood — 売僧, a monk who sells. Ordered to die by the very patron he'd served. On his last morning, he prepared one perfect bowl of tea." data-pos="—" data-neg="A distorted market" data-asp="— (end)"/>
+        <circle cx="400" cy="225" r="4" fill="#c4713b" opacity="0.36" pointer-events="none"/>
+
+        <text x="394" y="148" fill="rgba(180,90,70,0.72)" font-family="'Cormorant Garamond'" font-size="12" font-style="italic">makyo</text>
+        <text x="394" y="162" fill="rgba(180,90,70,0.43)" font-family="'Noto Serif JP'" font-size="11">魔境</text>
+      </svg>
+    </div>
+
+
+    <!-- ============================================ -->
+    <!-- JOBS                                         -->
+    <!-- ============================================ -->
+    <div class="panel">
+      <div class="panel-name" style="color: rgba(138,154,122,0.8);">Steve Jobs</div>
+      <div class="panel-kanji">1955–2011</div>
+      <div class="panel-summary">
+        The widest cone of the three — billions reached.
+        Yet aspiration plateaus at <em>beauty</em>, never rising to something beyond the self.
+        Impact− never vanishes. Zen reached his products,
+        but not the people beside him. A brilliant shape, stretched sideways, never upward.
+      </div>
+      <svg viewBox="0 0 480 310" fill="none" id="svg-jobs">
+        <line x1="55" y1="265" x2="440" y2="265" stroke="rgba(212,147,90,0.22)" stroke-width="0.8"/>
+        <line x1="55" y1="265" x2="155" y2="165" stroke="rgba(232,228,220,0.12)" stroke-width="0.7"/>
+        <line x1="55" y1="265" x2="18" y2="292" stroke="rgba(232,228,220,0.08)" stroke-width="0.6" stroke-dasharray="3 2"/>
+        <line x1="55" y1="261" x2="55" y2="22" stroke="rgba(138,154,122,0.15)" stroke-width="0.7"/>
+        <circle cx="55" cy="265" r="2.5" fill="#d4935a" opacity="0.3"/>
+
+        <path d="M 63 261 C 140 244, 250 210, 330 186 C 375 174, 410 168, 435 172" stroke="#8a9a7a" stroke-width="1.2" stroke-opacity="0.38" fill="none"/>
+        <path d="M 59 270 C 120 276, 200 286, 270 294 C 330 300, 380 304, 415 302" stroke="#8a9a7a" stroke-width="1" stroke-opacity="0.22" fill="none"/>
+        <path d="M 59 255 C 130 222, 230 170, 310 132 C 360 112, 400 106, 430 112" stroke="#8a9a7a" stroke-width="1.5" stroke-opacity="0.42" fill="none"/>
+        <path d="M 63 261 C 140 244, 250 210, 330 186 C 375 174, 410 168, 435 172 L 430 112 C 400 106, 360 112, 310 132 C 230 170, 130 222, 59 255 Z" fill="#8a9a7a" fill-opacity="0.04"/>
+        <path d="M 59 270 C 120 276, 200 286, 270 294 C 330 300, 380 304, 415 302 L 430 112 C 400 106, 360 112, 310 132 C 230 170, 130 222, 59 255 Z" fill="#8a9a7a" fill-opacity="0.06"/>
+        <line x1="330" y1="186" x2="310" y2="132" stroke="#8a9a7a" stroke-width="0.5" stroke-opacity="0.12"/>
+        <line x1="270" y1="294" x2="310" y2="132" stroke="#8a9a7a" stroke-width="0.5" stroke-opacity="0.1"/>
+        <path d="M 360 112 L 430 112" stroke="rgba(138,154,122,0.18)" stroke-width="2" stroke-dasharray="4 4"/>
+
+        <circle class="data-pt" cx="110" cy="240" r="7" fill="#8a9a7a" opacity="0.001"
+          data-en="Zen Practice Begins" data-jp="禅修行" data-body="Studied under Kōbun Chino Otogawa for over 30 years. Considered ordination, but was told: stay in the world. Find Zen in your work." data-pos="Self" data-neg="—" data-asp="The Way"/>
+        <circle cx="110" cy="240" r="4" fill="#8a9a7a" opacity="0.45" pointer-events="none"/>
+
+        <circle class="data-pt" cx="265" cy="156" r="8" fill="#8a9a7a" opacity="0.001"
+          data-en="Zen in Product Form" data-jp="禅的プロダクト" data-body="iPod, iPhone. Removing the unnecessary — buttons, features, noise. Kōbun's teaching of emptiness, crystallized into objects. The aesthetic of less, industrial-scale." data-pos="Hundreds of millions of users" data-neg="Factory workers, supply chain stress" data-asp="Beauty"/>
+        <circle cx="265" cy="156" r="5.5" fill="#8a9a7a" opacity="0.52" pointer-events="none"/>
+
+        <circle class="data-pt" cx="395" cy="112" r="8" fill="#8a9a7a" opacity="0.001"
+          data-en="iPhone — Aspiration Plateaus" data-jp="iPhone" data-body="Reached billions. Among the most widely adopted products in human history. Yet aspiration does not rise — it stays at 'beautiful products.' Immense impact, horizontal growth. Never transcendence." data-pos="Billions (life transformed)" data-neg="Attention economy, factory conditions" data-asp="Beauty (no further rise)"/>
+        <circle cx="395" cy="112" r="5.5" fill="#8a9a7a" opacity="0.55" pointer-events="none"/>
+
+        <circle class="data-pt" cx="210" cy="282" r="7" fill="#8a9a7a" opacity="0.001"
+          data-en="Relationships" data-jp="人間関係" data-body="Colleagues reduced to tears. Friends abandoned. A daughter denied. Zen reached his products beautifully. It never reached the people beside him." data-pos="—" data-neg="Family, colleagues, friends" data-asp="Ego"/>
+        <circle cx="210" cy="282" r="4" fill="#8a9a7a" opacity="0.35" pointer-events="none"/>
+
+        <circle class="data-pt" cx="395" cy="302" r="6" fill="#8a9a7a" opacity="0.001"
+          data-en="The Shadow of Scale" data-jp="規模の影" data-body="As impact+ grows to billions, impact− grows with it. Supply chain labor conditions. Addictive screen time. The shadow does not shrink — it scales." data-pos="—" data-neg="Factory workers, users' attention" data-asp="—"/>
+        <circle cx="395" cy="302" r="3.5" fill="#8a9a7a" opacity="0.3" pointer-events="none"/>
+
+        <text x="432" y="108" fill="rgba(138,154,122,0.43)" font-family="'Cormorant Garamond'" font-size="13" font-style="italic">plateau</text>
+      </svg>
+    </div>
+
+
+    <!-- ============================================ -->
+    <!-- CHOUINARD                                    -->
+    <!-- ============================================ -->
+    <div class="panel">
+      <div class="panel-name" style="color: rgba(160,180,200,0.8);">Yvon Chouinard</div>
+      <div class="panel-kanji">1938–</div>
+      <div class="panel-summary">
+        The only cone where impact− <em>vanishes</em>.
+        He noticed his pitons were scarring the rock, and chose to stop selling them —
+        his most profitable product.
+        From that moment, the lower edge contracts while aspiration climbs.
+        The cone sheds its shadow and rises.
+        This is <em>shūren</em> — cultivation, not suppression.
+      </div>
+      <svg viewBox="0 0 480 310" fill="none" id="svg-chouinard">
+        <line x1="55" y1="265" x2="440" y2="265" stroke="rgba(212,147,90,0.22)" stroke-width="0.8"/>
+        <line x1="55" y1="265" x2="155" y2="165" stroke="rgba(232,228,220,0.12)" stroke-width="0.7"/>
+        <line x1="55" y1="265" x2="18" y2="292" stroke="rgba(232,228,220,0.08)" stroke-width="0.6" stroke-dasharray="3 2"/>
+        <line x1="55" y1="261" x2="55" y2="22" stroke="rgba(138,154,122,0.15)" stroke-width="0.7"/>
+        <circle cx="55" cy="265" r="2.5" fill="#d4935a" opacity="0.3"/>
+
+        <path d="M 63 261 C 130 248, 230 228, 310 216 C 360 208, 410 204, 440 202" stroke="#a0b4c8" stroke-width="1.2" stroke-opacity="0.38" fill="none"/>
+        <path d="M 59 270 C 120 276, 210 280, 290 278 C 350 276, 410 268, 438 265" stroke="#a0b4c8" stroke-width="1" stroke-opacity="0.22" fill="none"/>
+        <path d="M 59 255 C 120 222, 220 155, 310 98 C 360 66, 400 44, 430 34" stroke="#a0b4c8" stroke-width="2" stroke-opacity="0.5" fill="none"/>
+        <path d="M 63 261 C 130 248, 230 228, 310 216 C 360 208, 410 204, 440 202 L 430 34 C 400 44, 360 66, 310 98 C 220 155, 120 222, 59 255 Z" fill="#a0b4c8" fill-opacity="0.04"/>
+        <path d="M 59 270 C 120 276, 210 280, 290 278 C 350 276, 410 268, 438 265 L 430 34 C 400 44, 360 66, 310 98 C 220 155, 120 222, 59 255 Z" fill="#a0b4c8" fill-opacity="0.06"/>
+        <line x1="310" y1="216" x2="310" y2="98" stroke="#a0b4c8" stroke-width="0.5" stroke-opacity="0.14"/>
+        <line x1="290" y1="278" x2="310" y2="98" stroke="#a0b4c8" stroke-width="0.5" stroke-opacity="0.1"/>
+        <line x1="440" y1="202" x2="430" y2="34" stroke="#a0b4c8" stroke-width="0.6" stroke-opacity="0.16"/>
+        <line x1="438" y1="265" x2="430" y2="34" stroke="#a0b4c8" stroke-width="0.5" stroke-opacity="0.12"/>
+
+        <circle class="data-pt" cx="100" cy="242" r="7" fill="#a0b4c8" opacity="0.001"
+          data-en="The Piton Maker" data-jp="ピトン職人" data-body="Hand-forged climbing gear for himself and friends. Years later, he realized his pitons were scarring the rock faces he loved. The wound was his own." data-pos="Fellow climbers" data-neg="Rock faces (environmental damage)" data-asp="Adventure"/>
+        <circle cx="100" cy="242" r="4" fill="#a0b4c8" opacity="0.45" pointer-events="none"/>
+
+        <circle class="data-pt" cx="200" cy="180" r="8" fill="#a0b4c8" opacity="0.001"
+          data-en="Pitons to Chocks" data-jp="ピトンからチョックへ" data-body="He voluntarily discontinued his most profitable product — pitons — replacing them with removable chocks that leave no trace. The first deliberate reduction of impact−." data-pos="Customers, employees" data-neg="Reduced (rock protection begins)" data-asp="Good products → Environment"/>
+        <circle cx="200" cy="180" r="5" fill="#a0b4c8" opacity="0.5" pointer-events="none"/>
+
+        <circle class="data-pt" cx="310" cy="98" r="8" fill="#a0b4c8" opacity="0.001"
+          data-en="The Environmental Turn" data-jp="環境転換" data-body="1% for the Planet. Complete switch to organic cotton. 'Profit is a result of doing the right thing.' The business itself becomes the activism." data-pos="Customers + environmental community" data-neg="Diminishing (not yet zero)" data-asp="The planet"/>
+        <circle cx="310" cy="98" r="5.5" fill="#a0b4c8" opacity="0.55" pointer-events="none"/>
+
+        <circle class="data-pt" cx="430" cy="34" r="9" fill="#a0b4c8" opacity="0.001"
+          data-en="Earth Is the Sole Shareholder" data-jp="地球が唯一の株主" data-body="In 2022, he transferred his $3 billion company to an environmental trust. 'Earth is now our only shareholder.' Impact+ reaches fans and activists — aspiration reaches the planet itself. The cone has shed its shadow." data-pos="Fans, the environmental movement" data-neg="— (effectively zero)" data-asp="The planet (apex)"/>
+        <circle cx="430" cy="34" r="7" fill="#a0b4c8" opacity="0.58" pointer-events="none"/>
+        <circle cx="430" cy="34" r="16" stroke="#a0b4c8" stroke-width="0.7" stroke-opacity="0.2" fill="none"/>
+
+        <text x="442" y="271" fill="rgba(160,180,200,0.51)" font-family="'Cormorant Garamond'" font-size="13" font-style="italic">shadow vanishes</text>
+      </svg>
+    </div>
+
+  </div>
+
+  <div class="brand">floclo studio</div>
+
+  <!-- Tooltip -->
+  <div class="tooltip" id="tooltip">
+    <div class="tooltip-title" id="tt-title"></div>
+    <div class="tooltip-kanji" id="tt-kanji"></div>
+    <div class="tooltip-body" id="tt-body"></div>
+    <div class="tooltip-bar">
+      <div><span class="lbl">IMPACT+ </span><span class="val pos" id="tt-pos"></span></div>
+      <div><span class="lbl">IMPACT− </span><span class="val neg" id="tt-neg"></span></div>
+      <div><span class="lbl">ASPIRATION </span><span class="val" id="tt-asp"></span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const tooltip = document.getElementById('tooltip');
+  const ttTitle = document.getElementById('tt-title');
+  const ttKanji = document.getElementById('tt-kanji');
+  const ttBody = document.getElementById('tt-body');
+  const ttPos = document.getElementById('tt-pos');
+  const ttNeg = document.getElementById('tt-neg');
+  const ttAsp = document.getElementById('tt-asp');
+
+  const colors = {
+    'svg-rikyu': 'rgba(196,113,59,0.9)',
+    'svg-jobs': 'rgba(138,154,122,0.9)',
+    'svg-chouinard': 'rgba(160,180,200,0.9)',
+  };
+
+  const isMobile = () => window.innerWidth <= 768;
+
+  // Enlarge invisible hit targets on mobile
+  function setTouchTargets() {
+    document.querySelectorAll('.data-pt').forEach(pt => {
+      const origR = pt.getAttribute('data-orig-r') || pt.getAttribute('r');
+      pt.setAttribute('data-orig-r', origR);
+      pt.setAttribute('r', isMobile() ? Math.max(parseFloat(origR) * 2.2, 16) : origR);
+    });
+  }
+  setTouchTargets();
+  window.addEventListener('resize', setTouchTargets);
+
+  // Update instruction text for mobile
+  if (isMobile()) {
+    const body = document.querySelector('.header-body');
+    if (body) body.innerHTML = body.innerHTML.replace('Hover', 'Tap');
+  }
+
+  document.querySelectorAll('.data-pt').forEach(pt => {
+    function show(e) {
+      const d = pt.dataset;
+      ttTitle.textContent = d.en || '';
+      ttKanji.textContent = d.jp || '';
+      ttBody.textContent = d.body || '';
+      ttPos.textContent = d.pos || '';
+      ttNeg.textContent = d.neg || '';
+      ttAsp.textContent = d.asp || '';
+      const svgId = pt.closest('svg')?.id;
+      ttTitle.style.color = colors[svgId] || 'rgba(232,228,220,0.9)';
+      tooltip.classList.add('visible');
+      if (!isMobile()) pos(e);
+    }
+    function pos(e) {
+      let x = e.clientX + 18, y = e.clientY - 14;
+      if (x + 320 > window.innerWidth) x = e.clientX - 320;
+      if (y < 0) y = 10;
+      const th = tooltip.getBoundingClientRect().height;
+      if (y + th > window.innerHeight) y = e.clientY - th - 14;
+      tooltip.style.left = x + 'px';
+      tooltip.style.top = y + 'px';
+    }
+    pt.addEventListener('mouseenter', show);
+    pt.addEventListener('mousemove', pos);
+    pt.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+    pt.addEventListener('click', (e) => { e.stopPropagation(); show(e); });
+    pt.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      show(e);
+    }, { passive: false });
+  });
+  document.addEventListener('click', () => tooltip.classList.remove('visible'));
+  document.addEventListener('touchstart', (e) => {
+    if (!e.target.classList.contains('data-pt')) tooltip.classList.remove('visible');
+  });
+</script>
+</body>
+</html>
