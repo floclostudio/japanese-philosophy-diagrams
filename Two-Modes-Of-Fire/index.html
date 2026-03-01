@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Modes of Fire — floclo studio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@200;300;400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f7f5f0;
+    color: #111;
+    font-family: 'EB Garamond', serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 740px;
+    margin: 0 auto;
+  }
+
+  .head {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .head h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 28px;
+    letter-spacing: 0.08em;
+    color: #111;
+    margin-bottom: 4px;
+  }
+  .head .sub {
+    font-size: 14px;
+    color: #888;
+    font-style: italic;
+    letter-spacing: 0.03em;
+  }
+
+  .diagram {
+    width: 100%;
+    margin: 0 auto 28px;
+  }
+  .diagram svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .bottom {
+    text-align: center;
+    padding-top: 16px;
+    border-top: 1px solid #ddd;
+  }
+  .bottom .credit {
+    font-size: 12px;
+    color: #aaa;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+  .bottom .links {
+    font-size: 13px;
+    color: #999;
+  }
+  .bottom .links a {
+    color: #888;
+    text-decoration: none;
+    border-bottom: 1px solid #ccc;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .bottom .links a:hover {
+    color: #555;
+    border-color: #888;
+  }
+  .bottom .links .sep {
+    margin: 0 8px;
+    color: #ccc;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="head">
+    <h1>Two Modes of Fire</h1>
+    <div class="sub">kiln fire and tending — the regenerative cycle</div>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 740 580" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="mtnG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7a8a6e"/>
+          <stop offset="60%" stop-color="#8a9a78"/>
+          <stop offset="100%" stop-color="#a0ab90"/>
+        </linearGradient>
+        <linearGradient id="soilG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#8a7a65"/>
+          <stop offset="100%" stop-color="#6b5d4a"/>
+        </linearGradient>
+        <radialGradient id="smallFireG" cx="0.5" cy="0.6" r="0.5">
+          <stop offset="0%" stop-color="#e8820a" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#c4540a" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="bigFireG" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="#e8720a" stop-opacity="0.35"/>
+          <stop offset="40%" stop-color="#d4600a" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#c4540a" stop-opacity="0"/>
+        </radialGradient>
+
+        <marker id="arrBrown" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="9" markerHeight="6" orient="auto">
+          <path d="M0,0.5 L9,3 L0,5.5" fill="none" stroke="#8B4513" stroke-width="1.2"/>
+        </marker>
+        <marker id="arrGray" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="9" markerHeight="6" orient="auto">
+          <path d="M0,0.5 L9,3 L0,5.5" fill="none" stroke="#666" stroke-width="1.2"/>
+        </marker>
+        <marker id="arrGreen" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="9" markerHeight="6" orient="auto">
+          <path d="M0,0.5 L9,3 L0,5.5" fill="none" stroke="#4a6741" stroke-width="1.2"/>
+        </marker>
+      </defs>
+
+      <!-- MOUNTAIN + SOIL -->
+      <path d="M30,405 Q180,325 370,365 Q560,325 710,405 L710,430 L30,430 Z" 
+            fill="url(#mtnG)" opacity="0.85"/>
+      <rect x="30" y="405" width="680" height="58" fill="url(#soilG)" opacity="0.5" rx="2"/>
+
+      <!-- Root network -->
+      <g opacity="0.25" stroke="#5a4a35" stroke-width="1" fill="none">
+        <path d="M120,425 Q145,438 170,427 Q195,440 220,428"/>
+        <path d="M280,430 Q305,442 330,432 Q355,445 380,433"/>
+        <path d="M430,427 Q455,440 480,429 Q505,442 530,430"/>
+        <line x1="150" y1="427" x2="150" y2="450"/>
+        <line x1="310" y1="432" x2="310" y2="455"/>
+        <line x1="460" y1="429" x2="460" y2="452"/>
+      </g>
+
+      <!-- Trees -->
+      <g opacity="0.5">
+        <line x1="165" y1="378" x2="165" y2="355" stroke="#3a5a30" stroke-width="1.8"/>
+        <ellipse cx="165" cy="350" rx="8" ry="13" fill="#4a6741" opacity="0.7"/>
+        <line x1="215" y1="362" x2="215" y2="336" stroke="#3a5a30" stroke-width="1.8"/>
+        <ellipse cx="215" cy="331" rx="9" ry="14" fill="#4a6741" opacity="0.6"/>
+        <line x1="530" y1="362" x2="530" y2="338" stroke="#3a5a30" stroke-width="1.8"/>
+        <ellipse cx="530" cy="333" rx="9" ry="14" fill="#4a6741" opacity="0.65"/>
+        <line x1="575" y1="378" x2="575" y2="357" stroke="#3a5a30" stroke-width="1.8"/>
+        <ellipse cx="575" cy="352" rx="8" ry="12" fill="#4a6741" opacity="0.7"/>
+      </g>
+
+      <!-- Stream -->
+      <path d="M80,396 Q200,387 330,394 Q460,385 630,393" 
+            stroke="#7a9bb5" stroke-width="1.5" fill="none" opacity="0.3"/>
+
+      <!-- Mountain labels -->
+      <text x="370" y="488" text-anchor="middle"
+            font-family="'Cormorant Garamond', serif" font-size="18" font-weight="400"
+            fill="#111" letter-spacing="0.08em">the mountain</text>
+      <text x="370" y="507" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="12"
+            fill="#888">suppliers · communities · ecosystems · knowledge · trust</text>
+      <text x="370" y="445" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="11" font-style="italic"
+            fill="#9a8a75" opacity="0.7">what is latent</text>
+
+      <!-- SMALL KILN -->
+      <g transform="translate(265, 395)">
+        <ellipse cx="0" cy="-5" rx="14" ry="11" fill="url(#smallFireG)"/>
+        <path d="M-10,5 Q-12,-6 -8,-14 Q0,-18 8,-14 Q12,-6 10,5 Z" 
+              fill="#5a4a3a" stroke="#3a2f24" stroke-width="1"/>
+        <ellipse cx="0" cy="5" rx="7" ry="2.5" fill="#3a2f24"/>
+        <ellipse cx="0" cy="-4" rx="3.5" ry="5" fill="#c4540a" opacity="0.4"/>
+        <ellipse cx="0" cy="-7" rx="2" ry="3" fill="#e8a020" opacity="0.3"/>
+      </g>
+
+      <!-- BOWL (left) -->
+      <g transform="translate(108, 245)">
+        <path d="M-20,0 Q-22,-15 0,-18 Q22,-15 20,0 Q12,7 0,9 Q-12,7 -20,0 Z" 
+              fill="#b8a890" stroke="#8a7a65" stroke-width="1"/>
+        <ellipse cx="0" cy="-5" rx="12" ry="7" fill="#a09080" opacity="0.35"/>
+      </g>
+      <text x="108" y="270" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="15" font-style="italic"
+            fill="#555">the bowl</text>
+      <text x="108" y="286" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="11"
+            fill="#999">product · craft · work</text>
+
+      <!-- ENTERPRISE (top) -->
+      <ellipse cx="370" cy="88" rx="70" ry="50" fill="url(#bigFireG)"/>
+      <ellipse cx="370" cy="88" rx="50" ry="36" fill="none" stroke="#d4600a" stroke-width="0.5" opacity="0.2"/>
+      <g transform="translate(370, 88)">
+        <path d="M0,-18 L20,0 L0,18 L-20,0 Z" 
+              fill="#f7f5f0" stroke="#8B4513" stroke-width="1.5"/>
+        <ellipse cx="0" cy="0" rx="8" ry="10" fill="#c4540a" opacity="0.15"/>
+      </g>
+      <text x="370" y="52" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="17" font-style="italic"
+            fill="#8B4513">enterprise</text>
+      <text x="370" y="124" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="12"
+            fill="#999">revenue · growth · surplus</text>
+      <text x="370" y="141" text-anchor="middle"
+            font-family="'Noto Serif JP', serif" font-size="11" font-weight="200"
+            fill="#888" opacity="0.8">分度 bundo</text>
+
+      <!-- REPLANT (right) -->
+      <g transform="translate(632, 232)">
+        <ellipse cx="0" cy="8" rx="16" ry="5" fill="#8a7a65" opacity="0.4"/>
+        <line x1="0" y1="6" x2="0" y2="-18" stroke="#4a6741" stroke-width="1.8"/>
+        <ellipse cx="-6" cy="-14" rx="5" ry="9" fill="#4a6741" opacity="0.6" transform="rotate(-20, -6, -14)"/>
+        <ellipse cx="5" cy="-18" rx="5" ry="8" fill="#5a7a50" opacity="0.55" transform="rotate(15, 5, -18)"/>
+        <ellipse cx="-1" cy="-24" rx="4" ry="7" fill="#4a6741" opacity="0.5" transform="rotate(-5, -1, -24)"/>
+      </g>
+      <text x="632" y="268" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="15" font-style="italic"
+            fill="#4a6741">replant</text>
+      <text x="632" y="284" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="11"
+            fill="#999">invest · restore · train</text>
+
+      <!-- CYCLE ARROWS -->
+      <!-- Arc 1: soil → bowl -->
+      <path d="M250,430 Q200,400 170,360 Q140,310 128,260" 
+            stroke="#8B4513" stroke-width="2" fill="none" 
+            marker-end="url(#arrBrown)"/>
+      <text x="152" y="352" text-anchor="end"
+            font-family="'EB Garamond', serif" font-size="14" font-style="italic"
+            fill="#8B4513">draw out · fire</text>
+      <text x="152" y="368" text-anchor="end"
+            font-family="'Noto Serif JP', serif" font-size="10.5" font-weight="200"
+            fill="#8B4513" opacity="0.85">活かす ikasu · 窯火 yōka</text>
+
+      <!-- Arc 2: bowl → enterprise -->
+      <path d="M138,230 Q210,140 345,90" 
+            stroke="#666" stroke-width="1.5" fill="none" 
+            marker-end="url(#arrGray)"/>
+      <text x="210" y="158" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="13" font-style="italic"
+            fill="#777">to market</text>
+
+      <!-- Arc 3: enterprise → replant -->
+      <path d="M395,90 Q530,140 618,215" 
+            stroke="#666" stroke-width="1.5" fill="none" 
+            marker-end="url(#arrGray)"/>
+      <text x="538" y="152" text-anchor="middle"
+            font-family="'EB Garamond', serif" font-size="13" font-style="italic"
+            fill="#777">allocate surplus</text>
+      <text x="538" y="168" text-anchor="middle"
+            font-family="'Noto Serif JP', serif" font-size="10.5" font-weight="200"
+            fill="#888" opacity="0.8">推譲 suijō</text>
+
+      <!-- Arc 4: replant → soil (dashed) -->
+      <path d="M618,260 Q570,330 530,390 Q510,420 490,435" 
+            stroke="#4a6741" stroke-width="1.8" fill="none" 
+            stroke-dasharray="7,4"
+            marker-end="url(#arrGreen)"/>
+      <text x="588" y="318" text-anchor="start"
+            font-family="'EB Garamond', serif" font-size="14" font-style="italic"
+            fill="#4a6741">tend</text>
+      <text x="588" y="334" text-anchor="start"
+            font-family="'Noto Serif JP', serif" font-size="10.5" font-weight="200"
+            fill="#4a6741" opacity="0.85">営み itonami</text>
+
+      <!-- CLOSING LINE -->
+      <text x="370" y="555" text-anchor="middle"
+            font-family="'Cormorant Garamond', serif" font-weight="300" font-size="14" font-style="italic"
+            fill="#555">When the fire enriches the mountain, the clay for the next bowl is better than today's.</text>
+
+    </svg>
+  </div>
+
+  <div class="bottom">
+    <div class="credit">floclo studio</div>
+    <div class="links">
+      <a href="https://medium.com/@floclo" target="_blank" rel="noopener">Read more on Medium</a>
+      <span class="sep">·</span>
+      <a href="https://buymeacoffee.com/floclo" target="_blank" rel="noopener">Buy me a coffee</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
