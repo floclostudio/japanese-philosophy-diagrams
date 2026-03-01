@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wabi-Sabi: The Other Perfection</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #fff;
+    color: #111;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5em 1.5em;
+  }
+
+  .frame {
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .title {
+    font-size: 0.6em;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #888;
+    text-align: center;
+    margin-bottom: 2.5em;
+  }
+
+  .plot {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 520px;
+  }
+
+  /* Both axes: black, equal weight */
+  .x-axis {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: #111;
+  }
+  .y-axis {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1.5px;
+    height: 100%;
+    background: #111;
+  }
+
+  /* Axis end labels */
+  .ax-end {
+    position: absolute;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #111;
+  }
+  .ax-end.x-left {
+    top: 50%;
+    left: 2%;
+    transform: translateY(-180%);
+    font-size: 0.65em;
+  }
+  .ax-end.x-right {
+    top: 50%;
+    right: 2%;
+    transform: translateY(-180%);
+    text-align: right;
+    font-size: 0.65em;
+  }
+  .ax-end.y-top {
+    top: 2%;
+    left: 50%;
+    transform: translate(12px, 0);
+    font-size: 0.6em;
+    font-weight: 600;
+    writing-mode: vertical-rl;
+    letter-spacing: 0.12em;
+  }
+  .ax-end.y-bottom {
+    bottom: 2%;
+    left: 50%;
+    transform: translate(12px, 0);
+    font-size: 0.6em;
+    writing-mode: vertical-rl;
+    letter-spacing: 0.12em;
+  }
+
+  /* Objects: all uniform black */
+  .obj {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .obj-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    margin: 0 auto;
+    background: #111;
+  }
+  .obj-name {
+    font-size: 0.58em;
+    font-weight: 500;
+    color: #111;
+    margin-top: 8px;
+    white-space: nowrap;
+  }
+  .obj-sub {
+    font-size: 0.44em;
+    font-weight: 300;
+    color: #666;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  /* Positions */
+  .obj-raku    { left: 74%; top: 15%; }
+  .obj-fish    { left: 63%; top: 27%; }
+  .obj-factory { left: 78%; top: 78%; }
+  .obj-decor   { left: 30%; top: 73%; }
+  .obj-cheap   { left: 20%; top: 83%; }
+  .obj-child   { left: 24%; top: 20%; }
+
+  .footer {
+    margin-top: 2.5em;
+    font-size: 0.5em;
+    color: #999;
+    text-align: center;
+    letter-spacing: 0.08em;
+  }
+  .footer a {
+    color: #999;
+    text-decoration: none;
+  }
+  .footer a:hover { color: #555; }
+
+  @media (max-width: 480px) {
+    .ax-end { font-size: 0.5em; }
+    .ax-end.y-top, .ax-end.y-bottom { font-size: 0.48em; }
+    .obj-name { font-size: 0.5em; }
+    .obj-sub  { font-size: 0.38em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+  <p class="title">Wabi-Sabi: The Other Perfection</p>
+
+  <div class="plot">
+    <div class="x-axis"></div>
+    <div class="y-axis"></div>
+
+    <div class="ax-end x-left">Imperfection</div>
+    <div class="ax-end x-right">Perfection</div>
+    <div class="ax-end y-top">Unrepeatable</div>
+    <div class="ax-end y-bottom">Reproducible</div>
+
+    <div class="obj obj-raku">
+      <div class="obj-dot"></div>
+      <div class="obj-name">Raku tea bowl</div>
+      <div class="obj-sub">one kiln, one afternoon</div>
+    </div>
+
+    <div class="obj obj-fish">
+      <div class="obj-dot"></div>
+      <div class="obj-name">Fishmonger's vessel</div>
+      <div class="obj-sub">before Rikyū saw it</div>
+    </div>
+
+    <div class="obj obj-factory">
+      <div class="obj-dot"></div>
+      <div class="obj-name">Factory cup</div>
+      <div class="obj-sub">1,000th identical copy</div>
+    </div>
+
+    <div class="obj obj-decor">
+      <div class="obj-dot"></div>
+      <div class="obj-name">"Wabi-sabi" décor</div>
+      <div class="obj-sub">mass-produced roughness</div>
+    </div>
+
+    <div class="obj obj-cheap">
+      <div class="obj-dot"></div>
+      <div class="obj-name">Cheap goods</div>
+      <div class="obj-sub">rough and replaceable</div>
+    </div>
+
+    <div class="obj obj-child">
+      <div class="obj-dot"></div>
+      <div class="obj-name">Child's drawing</div>
+      <div class="obj-sub">unrepeatable, unrefined</div>
+    </div>
+  </div>
+
+  <p class="footer">
+    floclo studio<br>
+    <a href="https://medium.com/@floclostudio">Medium</a>
+    &nbsp;·&nbsp;
+    <a href="https://buymeacoffee.com/floclostudio">Buy me a coffee</a>
+  </p>
+
+</div>
+
+</body>
+</html>
