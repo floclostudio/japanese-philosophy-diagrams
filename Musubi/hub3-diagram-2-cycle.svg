@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 470" role="img" aria-labelledby="title desc">
+  <title id="title">Musubi and hodoki — the cycle's two crossings</title>
+  <desc id="desc">A ring crossing a horizontal threshold line. Left crossing marks the breakthrough (musubi), where the hidden becomes manifest. Right crossing marks the return (hodoki), where the manifest releases. Above the line is manifest; below is hidden.</desc>
+
+  <style>
+    .th { font-family: Georgia, "Times New Roman", serif; font-size: 17px; fill: #2C2C2C; }
+    .ts { font-family: Georgia, "Times New Roman", serif; font-size: 13px; fill: #6B6B6B; }
+    .threshold { stroke: #999999; stroke-width: 0.6; fill: none; stroke-dasharray: 4 3; opacity: 0.7; }
+    .ring { fill: none; stroke: #2C2C2C; stroke-width: 1.3; opacity: 0.75; }
+    .arrow { fill: #2C2C2C; opacity: 0.7; }
+    .marker-quiet { fill: #2C2C2C; opacity: 0.7; }
+    .leader { stroke: #B0B0B0; stroke-width: 0.5; fill: none; opacity: 0.7; }
+  </style>
+
+  <!-- Threshold line -->
+  <line class="threshold" x1="60" y1="230" x2="620" y2="230"/>
+
+  <!-- Ring -->
+  <circle class="ring" cx="340" cy="230" r="130"/>
+
+  <!-- Direction arrow at top -->
+  <path class="arrow" d="M 340 99 L 351 105 L 340 111 Z"/>
+
+  <!-- Musubi marker (amber, prominent) -->
+  <circle cx="210" cy="230" r="14" fill="#EF9F27" opacity="0.18"/>
+  <circle cx="210" cy="230" r="6" fill="#EF9F27" opacity="0.95"/>
+
+  <!-- Hodoki marker (quiet) -->
+  <circle class="marker-quiet" cx="470" cy="230" r="4"/>
+
+  <!-- Region labels -->
+  <text class="th" x="340" y="156" text-anchor="middle">Manifest</text>
+  <text class="th" x="340" y="316" text-anchor="middle">Hidden</text>
+
+  <!-- Musubi label -->
+  <line class="leader" x1="210" y1="248" x2="210" y2="392"/>
+  <text class="th" x="210" y="412" text-anchor="middle">Breakthrough</text>
+  <text class="ts" x="210" y="432" text-anchor="middle">musubi · 結び</text>
+
+  <!-- Hodoki label -->
+  <line class="leader" x1="470" y1="248" x2="470" y2="392"/>
+  <text class="th" x="470" y="412" text-anchor="middle">Return</text>
+  <text class="ts" x="470" y="432" text-anchor="middle">hodoki · 解き</text>
+</svg>

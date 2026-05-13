@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 470" role="img" aria-labelledby="title desc">
+  <title id="title">Musubi: from language to meaning</title>
+  <desc id="desc">The morpheme 產 (musu, to bring forth) combines with 霊 (hi/bi, vital force) into 產霊 (musubi). Witnessed in deities and everyday words. Distilled essence at the bottom.</desc>
+
+  <style>
+    .th { font-family: Georgia, "Times New Roman", serif; font-size: 17px; fill: #2C2C2C; }
+    .ts { font-family: Georgia, "Times New Roman", serif; font-size: 13px; fill: #6B6B6B; }
+    .amber-box { fill: #FEF8EE; stroke: #EF9F27; stroke-width: 0.8; }
+    .amber-box-strong { fill: #FEF8EE; stroke: #EF9F27; stroke-width: 1.2; }
+    .light-frame { fill: none; stroke: #B0B0B0; stroke-width: 0.5; }
+    .connector { stroke: #B0B0B0; stroke-width: 0.8; fill: none; opacity: 0.55; }
+    .divider-dashed { stroke: #B0B0B0; stroke-width: 0.8; fill: none; stroke-dasharray: 3 3; opacity: 0.55; }
+    .divider-soft { stroke: #B0B0B0; stroke-width: 0.5; opacity: 0.4; }
+  </style>
+
+  <!-- Top left: 產 musu -->
+  <rect class="amber-box" x="120" y="40" width="180" height="80" rx="8"/>
+  <text class="th" x="210" y="68" text-anchor="middle">產 · musu</text>
+  <text class="ts" x="210" y="88" text-anchor="middle">to bring forth</text>
+  <text class="ts" x="210" y="106" text-anchor="middle">verb of generation</text>
+
+  <!-- Plus -->
+  <text class="th" x="340" y="86" text-anchor="middle">+</text>
+
+  <!-- Top right: 霊 hi/bi -->
+  <rect class="amber-box" x="380" y="40" width="180" height="80" rx="8"/>
+  <text class="th" x="470" y="68" text-anchor="middle">霊 · hi · bi</text>
+  <text class="ts" x="470" y="88" text-anchor="middle">vital force, sun</text>
+  <text class="ts" x="470" y="106" text-anchor="middle">spirit, energy</text>
+
+  <!-- Connectors down -->
+  <line class="connector" x1="210" y1="120" x2="320" y2="170"/>
+  <line class="connector" x1="470" y1="120" x2="360" y2="170"/>
+
+  <!-- Center: musubi -->
+  <rect class="amber-box-strong" x="200" y="170" width="280" height="90" rx="8"/>
+  <text class="th" x="340" y="200" text-anchor="middle">產霊 · musubi</text>
+  <text class="ts" x="340" y="220" text-anchor="middle">the generative force itself</text>
+  <text class="ts" x="340" y="244" text-anchor="middle">also written: 結ぶ (bind) · 掬ぶ (scoop) · 解く (unbind, the companion)</text>
+
+  <!-- Down to witnesses -->
+  <line class="divider-dashed" x1="340" y1="260" x2="340" y2="305"/>
+
+  <!-- Witnesses frame -->
+  <rect class="light-frame" x="80" y="305" width="520" height="135" rx="8"/>
+  <text class="ts" x="340" y="332" text-anchor="middle">witnessed in deities · 高御產霊神 · 神產霊神 · 火產霊神</text>
+  <text class="ts" x="340" y="350" text-anchor="middle">and in everyday words · むすこ · むすめ · おむすび</text>
+
+  <line class="divider-soft" x1="200" y1="370" x2="480" y2="370"/>
+
+  <text class="th" x="340" y="397" text-anchor="middle">Where two bind with vital force,</text>
+  <text class="th" x="340" y="417" text-anchor="middle">what was not — now is.</text>
+</svg>

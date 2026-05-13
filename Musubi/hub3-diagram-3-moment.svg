@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 480" role="img" aria-labelledby="title desc">
+  <title id="title">The shape of the moment — musubi as binding of two latent things with vital force</title>
+  <desc id="desc">Two streams rise from the lower corners and converge at concentric circles of warm light. From the light a single line ascends, ending in an arrow. Each stream's origin is labeled "latent". A side label names the meeting point as musubi.</desc>
+
+  <style>
+    .th { font-family: Georgia, "Times New Roman", serif; font-size: 17px; fill: #2C2C2C; }
+    .ts { font-family: Georgia, "Times New Roman", serif; font-size: 13px; fill: #6B6B6B; }
+    .stream { stroke: #2C2C2C; stroke-width: 1.2; fill: none; opacity: 0.6; }
+    .stream-origin { fill: #2C2C2C; opacity: 0.6; }
+    .ascending { stroke: #EF9F27; stroke-width: 1.5; stroke-linecap: round; fill: none; opacity: 0.7; }
+    .arrowhead { fill: #EF9F27; opacity: 0.9; }
+    .leader { stroke: #B0B0B0; stroke-width: 0.5; fill: none; opacity: 0.7; }
+  </style>
+
+  <!-- Ascending line + arrowhead -->
+  <line class="ascending" x1="340" y1="240" x2="340" y2="80"/>
+  <path class="arrowhead" d="M 340 68 L 333 84 L 347 84 Z"/>
+
+  <!-- Concentric circles at convergence (vital force, kindling) -->
+  <circle cx="340" cy="252" r="50" fill="#EF9F27" opacity="0.05"/>
+  <circle cx="340" cy="252" r="36" fill="#EF9F27" opacity="0.13"/>
+  <circle cx="340" cy="252" r="22" fill="#EF9F27" opacity="0.30"/>
+  <circle cx="340" cy="252" r="11" fill="#EF9F27" opacity="0.70"/>
+  <circle cx="340" cy="252" r="5" fill="#EF9F27" opacity="1"/>
+
+  <!-- Two streams rising and converging -->
+  <path class="stream" d="M 100 430 C 180 372, 260 314, 326 262"/>
+  <path class="stream" d="M 580 430 C 500 372, 420 314, 354 262"/>
+
+  <!-- Stream origin markers -->
+  <circle class="stream-origin" cx="100" cy="430" r="3"/>
+  <circle class="stream-origin" cx="580" cy="430" r="3"/>
+
+  <!-- Musubi label -->
+  <line class="leader" x1="356" y1="248" x2="478" y2="248"/>
+  <text class="th" x="488" y="246">musubi</text>
+  <text class="ts" x="488" y="266">結ぶ × 霊</text>
+  <text class="ts" x="488" y="284">binding with vital force</text>
+
+  <!-- Latent labels -->
+  <text class="ts" x="100" y="455" text-anchor="middle">latent</text>
+  <text class="ts" x="580" y="455" text-anchor="middle">latent</text>
+</svg>
